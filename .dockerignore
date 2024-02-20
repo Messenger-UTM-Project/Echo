@@ -54,3 +54,24 @@ ehthumbs.db
 
 # VS Code
 .vscode/
+
+# Ignore build output and logs
+bin/
+obj/
+*.log
+
+# Ignore NuGet packages
+*.nupkg
+packages/
+*.lock.json
+
+# Ignore Rider specific files
+*.sln.iml
+
+# Ignore node_modules directory if using npm for frontend packages
+node_modules/
+
+# Ignore Webpack related files
+dist/
+
+docs/
