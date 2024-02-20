@@ -1,0 +1,113 @@
+.header .image .overlay, .header .image {
+  min-width: 2em;
+  width: 100%;
+  max-width: 12em;
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+
+.profile {
+  display: grid;
+  gap: 3em;
+}
+@media only screen and (max-width: 768px) {
+  .profile {
+    grid-template-rows: max-content;
+  }
+}
+@media only screen and (min-width: 768px) {
+  .profile {
+    grid-template-columns: minmax(12em, 15%) 1fr;
+  }
+}
+
+.qrcode-container, .profile-image-edit-container {
+  display: flex;
+  gap: 2em;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  padding: 2em;
+  font-size: 1.5em;
+  background-color: rgba(31, 32, 41, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 10;
+}
+
+.qrcode-container .qrcode {
+  max-width: 20em;
+  aspect-ratio: 1;
+}
+.qrcode-container .qrcode path {
+  fill: #c4c3ca;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5em;
+}
+.header .image {
+  background-size: cover;
+  background-position: center;
+  -moz-box-shadow: rgba(20, 20, 20, 0.9) 0px 7px 29px 0px inset, #141414 0px 7px 29px 0px;
+  -webkit-box-shadow: rgba(20, 20, 20, 0.9) 0px 7px 29px 0px inset, #141414 0px 7px 29px 0px;
+  box-shadow: rgba(20, 20, 20, 0.9) 0px 7px 29px 0px inset, #141414 0px 7px 29px 0px;
+}
+.header .image .overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  cursor: pointer;
+  -moz webkit-backdrop-filter: brightness(0.5);
+  -o-backdrop-filter: brightness(0.5);
+  backdrop-filter: brightness(0.5);
+  -moz webkit o-transition: opacity 200ms linear;
+  transition: opacity 200ms linear;
+}
+.header .image .overlay:hover {
+  opacity: 1;
+}
+.header .info {
+  text-align: center;
+}
+.header .info .name {
+  font-size: 1.75em;
+  font-weight: 800;
+}
+.header .info .username {
+  font-size: 1.25em;
+  font-weight: 600;
+}
+.header .buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  justify-content: center;
+  align-items: stretch;
+  font-size: 1.4em;
+}
+
+.main {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2em;
+}
+
+.editProfilePicture i {
+  font-size: 2em;
+  -moz webkit-transition: opacity 200ms linear;
+  -o-transition: opacity 200ms linear;
+  transition: opacity 200ms linear;
+}

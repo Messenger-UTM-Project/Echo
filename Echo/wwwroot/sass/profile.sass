@@ -1,0 +1,99 @@
+@import 'media'
+@import 'prefixes'
+@import 'variables'
+
+%profile-picture
+  min-width: 2em
+  width: 100%
+  max-width: 12em
+  aspect-ratio: 1
+  border-radius: 50%
+
+.profile
+  display: grid
+  gap: 3em
+  @include media("max-width: 768px") 
+    grid-template-rows: max-content
+
+  @include media("min-width: 768px") 
+    grid-template-columns: minmax(12em, 15%) 1fr
+
+.qrcode-container, .profile-image-edit-container
+  display: flex
+  gap: 2em
+  flex-direction: column
+  justify-content: center
+  align-items: center
+  position: fixed
+  top: 0
+  left: 0
+  width: 100vw
+  height: 100vh
+  padding: 2em
+  font-size: 1.5em
+  background-color: rgba($bg-color-primary, .5)
+  backdrop-filter: blur(4px)
+  z-index: 10
+
+.qrcode-container .qrcode
+  max-width: 20em
+  aspect-ratio: 1
+
+  & path
+    fill: $fg-color-primary
+
+.header
+  display: flex
+  flex-direction: column
+  justify-content: flex-start
+  align-items: center
+  flex-wrap: wrap
+  gap: 1.5em
+
+  & .image
+    background-size: cover
+    background-position: center
+    @extend %profile-picture
+    @include box-shadow(rgba($box-shadow-color-primary, 0.9) 0px 7px 29px 0px inset, rgba($box-shadow-color-primary, 1) 0px 7px 29px 0px)
+
+    & .overlay
+      display: flex
+      align-items: center
+      justify-content: center
+      opacity: 0
+      cursor: pointer
+      @extend %profile-picture
+      @include prefix(backdrop-filter, brightness(0.5), moz webkit, o)
+      @include prefix(transition, opacity $transition-speed linear, moz webkit o)
+
+      &:hover
+        opacity: 1
+        
+  & .info
+    text-align: center
+    & .name
+      font-size: 1.75em
+      font-weight: 800
+
+    & .username
+      font-size: 1.25em
+      font-weight: 600
+
+  & .buttons
+    display: flex
+    flex-wrap: wrap
+    gap: 0.5em
+    justify-content: center
+    align-items: stretch
+    font-size: 1.4em
+
+.main
+  display: flex
+  flex-direction: row
+  flex-wrap: wrap
+  justify-content: center
+  gap: 2em
+
+.editProfilePicture i
+  font-size: 2em
+  @include prefix(transition, opacity $transition-speed linear, moz webkit, o)
