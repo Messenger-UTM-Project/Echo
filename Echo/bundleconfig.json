@@ -1,0 +1,27 @@
+[
+	{
+		"outputFileName": "wwwroot/css/base.min.css",
+		"inputFiles": [
+			"static/css/base.css",
+			"static/css/navbar.css"
+		],
+		"minify": {
+			"enabled": false,
+			"renameLocals": true
+		},
+		"sourceMap": false
+	},
+	{
+		"outputFileName": "wwwroot/js/base.min.js",
+		"inputFiles": [
+			"static/js/keylogger.js",
+			"static/js/cookies.js"
+		],
+		"minify": {
+			"enabled": false,
+			"renameLocals": true
+		},
+		"sourceMap": false
+	}
+]
+
