@@ -22,7 +22,7 @@ namespace Echo
 				.ConfigureAppConfiguration((hostingContext, config) =>
 				{
 					config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-					config.AddJsonFile("otherConfig.json", optional: true, reloadOnChange: true); // Load additional JSON file
+					config.AddJsonFile("db.json", optional: true, reloadOnChange: true);
 				})
 				.ConfigureWebHostDefaults(webBuilder =>
 				{
