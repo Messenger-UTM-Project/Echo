@@ -36,6 +36,8 @@ namespace Echo
             {
                 endpoints.MapControllers();
             });
+
+			app.UseHttpsRedirection();
         }
 
 		public void ConfigureServices(IServiceCollection services)
