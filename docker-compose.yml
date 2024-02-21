@@ -13,7 +13,7 @@ services:
       - "5080:5432"
     networks:
       network:
-        ipv4_address: 172.29.5.4   # Specify the desired IP address
+        ipv4_address: 172.29.5.4
 
   dotnet_app:
     image: mcr.microsoft.com/dotnet/sdk:8.0
@@ -35,7 +35,7 @@ services:
       - "5081:5000"
     networks:
       network:
-        ipv4_address: 172.29.5.5   # Specify the desired IP address
+        ipv4_address: 172.29.5.5
 
 networks:
   network:
