@@ -18,7 +18,6 @@
 
 ## Usage
 1. **Docker**
-    - Uncomment `docker_db.json` in `Startup.cs`
     - `docker compose up`
 2. **Manual**
     - Set up postgreSQL DB and create/edit `db.json`
