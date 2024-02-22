@@ -13,4 +13,13 @@
 </p></div>
 
 ### Table of contents
+- [Usage](#usage)
 - [Docs](https://github.com/Messenger-UTM-Project/Docs)
+
+## Usage
+1. **Docker**
+    - Uncomment `docker_db.json` in `Startup.cs`
+    - `docker compose up`
+2. **Manual**
+    - Set up postgreSQL DB and create/edit `db.json`
+    - `export PATH="$PATH:/home/dustyn/.dotnet/tools" && dotnet tool install dotnet-ef -g && dotnet ef migrations add InitialCreate && make launch`
