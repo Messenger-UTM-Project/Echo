@@ -23,6 +23,7 @@ namespace Echo
 				{
 					config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 					config.AddJsonFile("db.json", optional: true, reloadOnChange: true);
+					// config.AddJsonFile("docker_db.json", optional: true, reloadOnChange: true);
 				})
 				.ConfigureWebHostDefaults(webBuilder =>
 				{
@@ -30,10 +31,3 @@ namespace Echo
 				});
 	}
 }
-
-/* var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
-
-app.MapGet("/", () => "Hello World!");
-
-app.Run(); */

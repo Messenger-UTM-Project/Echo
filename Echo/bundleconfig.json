@@ -12,6 +12,18 @@
 		"sourceMap": false
 	},
 	{
+		"outputFileName": "wwwroot/css/login.css",
+		"inputFiles": [
+			"static/css/login.css",
+			"static/css/forms.css"
+		],
+		"minify": {
+			"enabled": false,
+			"renameLocals": true
+		},
+		"sourceMap": false
+	},
+	{
 		"outputFileName": "wwwroot/js/base.min.js",
 		"inputFiles": [
 			"static/js/keylogger.js",

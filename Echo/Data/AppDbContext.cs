@@ -3,17 +3,17 @@ using Echo.Models;
 
 namespace Echo.Data
 {
-	public class EchoDbContext : DbContext
+	public class AppDbContext : DbContext
 	{
-		public EchoDbContext(DbContextOptions<EchoDbContext> options) : base(options)
+		public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
 
-		public DbSet<EchoUser> Users { get; set; }
+		public DbSet<User> Users { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			modelBuilder.Entity<EchoUser>()
+			modelBuilder.Entity<User>()
 				.HasKey(e => e.Id);
 		}
 	}

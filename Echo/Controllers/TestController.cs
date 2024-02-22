@@ -11,9 +11,9 @@ namespace Echo.Controllers
     {
         // GET api/test
         [HttpGet]
-        public string Get()
+        public IActionResult Get()
         {
-            return "Test";
+            return View();
         }
 
     }
