@@ -22,8 +22,8 @@ namespace Echo
 				.ConfigureAppConfiguration((hostingContext, config) =>
 				{
 					config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+					config.AddJsonFile("docker_db.json", optional: true, reloadOnChange: true);
 					config.AddJsonFile("db.json", optional: true, reloadOnChange: true);
-					// config.AddJsonFile("docker_db.json", optional: true, reloadOnChange: true);
 				})
 				.ConfigureWebHostDefaults(webBuilder =>
 				{
