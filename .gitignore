@@ -79,5 +79,5 @@ Docs/
 *.vim
 db.json
 Migrations/
-wwwroot/css/
-wwwroot/js/
+Echo/wwwroot/css
+Echo/wwwroot/js
