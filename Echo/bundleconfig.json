@@ -12,7 +12,7 @@
 		"sourceMap": false
 	},
 	{
-		"outputFileName": "wwwroot/css/login.css",
+		"outputFileName": "wwwroot/css/login.min.css",
 		"inputFiles": [
 			"static/css/login.css",
 			"static/css/forms.css"
