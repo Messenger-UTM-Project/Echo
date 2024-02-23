@@ -1,18 +1,34 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Globalization;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
 using Microsoft.EntityFrameworkCore;
+
 using Npgsql.EntityFrameworkCore.PostgreSQL;
+
 using Echo.Data;
+using Echo.Hubs;
+using Echo.Middlewares;
 
 namespace Echo
 {
@@ -25,60 +41,121 @@ namespace Echo
 
         public IConfiguration Configuration { get; }
 
-		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-			else
+            else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/error");
                 app.UseHsts();
             }
 
-			app.UseHttpsRedirection();
-			app.UseStaticFiles();
+			var locOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
+			app.UseRequestLocalization(locOptions.Value);
+
+            app.UseNotFoundMiddleware();
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
             app.UseRouting();
 
-			app.UseAuthentication();
-			app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                // Default routes
+                endpoints.MapControllers().RequireAuthorization();
+
+                // Chat Hub
+                endpoints.MapHub<ChatHub>("/chatHub");
             });
         }
 
-		public void ConfigureServices(IServiceCollection services)
-		{
-			services.AddControllers();
-
-			services.AddControllersWithViews();
-
-			services.Configure<RazorViewEngineOptions>(o =>
+        public void ConfigureServices(IServiceCollection services)
+        {
+			services.AddLogging(builder =>
 			{
-				// {2} is area, {1} is controller,{0} is the action    
-				o.ViewLocationFormats.Clear(); 
-				o.ViewLocationFormats.Add("/Controllers/{1}/Views/{0}" + RazorViewEngine.ViewExtension);
-				o.ViewLocationFormats.Add("/Controllers/Shared/Views/{0}" + RazorViewEngine.ViewExtension);
-
-				o.AreaViewLocationFormats.Clear();
-				o.AreaViewLocationFormats.Add("/Areas/{2}/Controllers/{1}/Views/{0}" + RazorViewEngine.ViewExtension);
-				o.AreaViewLocationFormats.Add("/Areas/{2}/Controllers/Shared/Views/{0}" + RazorViewEngine.ViewExtension);
-				o.AreaViewLocationFormats.Add("/Areas/Shared/Views/{0}" + RazorViewEngine.ViewExtension);
+				builder.AddConsole();
 			});
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
-                {
-                    options.LoginPath = "/login";
-                    options.AccessDeniedPath = "/403";
-                });
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+            services.Configure<RequestLocalizationOptions>(options =>
+			{
+				string defaultCulture = "en";
+				var supportedCultures = new[] { defaultCulture, "ru" };
+				var cultures = supportedCultures.Select(culture => new CultureInfo(culture)).ToList();
+				options.DefaultRequestCulture = new RequestCulture(defaultCulture);
+				options.SupportedCultures = cultures;
+				options.SupportedUICultures = cultures;
+			});
+
+            services.Configure<RazorViewEngineOptions>(o =>
+            {
+                // {2} is area, {1} is controller,{0} is the action    
+                o.ViewLocationFormats.Clear();
+                o.ViewLocationFormats.Add("/Controllers/{1}/Views/{0}" + RazorViewEngine.ViewExtension);
+                o.ViewLocationFormats.Add("/Controllers/Shared/Views/{0}" + RazorViewEngine.ViewExtension);
+
+                o.AreaViewLocationFormats.Clear();
+                o.AreaViewLocationFormats.Add("/Areas/{2}/Controllers/{1}/Views/{0}" + RazorViewEngine.ViewExtension);
+                o.AreaViewLocationFormats.Add("/Areas/{2}/Controllers/Shared/Views/{0}" + RazorViewEngine.ViewExtension);
+                o.AreaViewLocationFormats.Add("/Areas/Shared/Views/{0}" + RazorViewEngine.ViewExtension);
+            });
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            }).AddCookie(options =>
+            {
+				options.LoginPath = "/login";
+				options.LogoutPath = "/logout";
+				options.AccessDeniedPath = "/403";
+			});
+
+			services.AddAuthorization(options =>
+			{
+				options.AddPolicy("RequireAdminRole", policy =>
+				{
+					policy.RequireRole("Admin");
+				});
+
+				options.DefaultPolicy = new AuthorizationPolicyBuilder()
+				  .RequireAuthenticatedUser()
+				  .Build();
+			});
 
 			services.AddDbContext<AppDbContext>(options =>
 				options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+
+			services.AddHttpsRedirection(options =>
+			{
+				options.HttpsPort = 5001;
+			});
+
+			services.AddSingleton<IStringLocalizerFactory, ResourceManagerStringLocalizerFactory>();
+
+			services.AddMvc();
+
+            services.AddControllers();
+            services.AddControllersWithViews()
+				.AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+				.AddDataAnnotationsLocalization()
+				.AddRazorRuntimeCompilation();
+
+            services.AddSignalR(options =>
+            {
+                options.EnableDetailedErrors = true;
+                options.MaximumReceiveMessageSize = 102400000;
+            });
+
 		}
     }
 }

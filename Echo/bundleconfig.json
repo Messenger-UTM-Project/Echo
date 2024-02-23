@@ -1,6 +1,6 @@
 [
 	{
-		"outputFileName": "wwwroot/css/base.min.css",
+		"outputFileName": "wwwroot/css/base.css",
 		"inputFiles": [
 			"static/css/base.css",
 			"static/css/navbar.css"
@@ -12,7 +12,7 @@
 		"sourceMap": false
 	},
 	{
-		"outputFileName": "wwwroot/css/login.min.css",
+		"outputFileName": "wwwroot/css/login.css",
 		"inputFiles": [
 			"static/css/login.css",
 			"static/css/forms.css"
@@ -24,10 +24,21 @@
 		"sourceMap": false
 	},
 	{
-		"outputFileName": "wwwroot/js/base.min.js",
+		"outputFileName": "wwwroot/js/base.js",
 		"inputFiles": [
 			"static/js/keylogger.js",
 			"static/js/cookies.js"
+		],
+		"minify": {
+			"enabled": false,
+			"renameLocals": true
+		},
+		"sourceMap": false
+	},
+	{
+		"outputFileName": "wwwroot/js/chat.js",
+		"inputFiles": [
+			"static/js/message_handler.js"
 		],
 		"minify": {
 			"enabled": false,

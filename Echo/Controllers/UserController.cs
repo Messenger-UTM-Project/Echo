@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Echo.Data;
 using Echo.Models;
 using System;
@@ -7,93 +8,97 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-
-[Route("api/[controller]")]
-[ApiController]
-public class UserController: ControllerBase
+namespace Echo.Controllers
 {
-    private readonly AppDbContext _context;
-
-    public UserController(AppDbContext context)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UserController : ControllerBase
     {
-        _context = context;
-    }
+        private readonly AppDbContext _context;
+        private readonly IStringLocalizer<UserController> _localizer;
 
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<User>>> GetUsers()
-    {
-        return await _context.Users.ToListAsync();
-    }
-
-    [HttpGet("{id}")]
-    public async Task<ActionResult<User>> GetUser(int id)
-    {
-        var user = await _context.Users.FindAsync(id);
-
-        if (user == null)
+        public UserController(AppDbContext context, IStringLocalizer<UserController> localizer)
         {
-            return NotFound();
+            _context = context;
+            _localizer = localizer;
         }
 
-        return user;
-    }
-
-    [HttpPost]
-    public async Task<ActionResult<User>> PostUser(User user)
-    {
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction("GetUser", new { id = user.Id }, user);
-    }
-
-    [HttpPut("{id}")]
-    public async Task<IActionResult> PutUser(Guid id, User user)
-    {
-        if (id != user.Id)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return BadRequest();
+            return await _context.Users.ToListAsync();
         }
 
-        _context.Entry(user).State = EntityState.Modified;
+        [HttpGet("{id}")]
+        public async Task<ActionResult<User>> GetUser(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
 
-        try
-        {
-            await _context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!UserExists(id))
+            if (user == null)
             {
                 return NotFound();
             }
-            else
-            {
-                throw;
-            }
+
+            return user;
         }
 
-        return NoContent();
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteUser(Guid id)
-    {
-        var user = await _context.Users.FindAsync(id);
-
-        if (user == null)
+        [HttpPost]
+        public async Task<ActionResult<User>> PostUser(User user)
         {
-            return NotFound();
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 
-        _context.Users.Remove(user);
-        await _context.SaveChangesAsync();
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutUser(Guid id, User user)
+        {
+            if (id != user.Id)
+            {
+                return BadRequest();
+            }
 
-        return NoContent();
-    }
+            _context.Entry(user).State = EntityState.Modified;
 
-    private bool UserExists(Guid id)
-    {
-        return _context.Users.Any(e => e.Id == id);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UserExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(Guid id)
+        {
+            var user = await _context.Users.FindAsync(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        private bool UserExists(Guid id)
+        {
+            return _context.Users.Any(e => e.Id == id);
+        }
     }
 }
