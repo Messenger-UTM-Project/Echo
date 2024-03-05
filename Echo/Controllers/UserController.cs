@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Localization;
 using Echo.Data;
 using Echo.Models;
+using Echo.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,24 +12,29 @@ using System.Threading.Tasks;
 
 namespace Echo.Controllers
 {
+	[AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
         private readonly AppDbContext _context;
+		private readonly UserService _service;
         private readonly IStringLocalizer<UserController> _localizer;
 
-        public UserController(AppDbContext context, IStringLocalizer<UserController> localizer)
+        public UserController(AppDbContext context, UserService service, IStringLocalizer<UserController> localizer)
         {
             _context = context;
+			_service = service;
             _localizer = localizer;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<IActionResult> GetUsers()
         {
-            return await _context.Users.ToListAsync();
-        }
+			var result = await _service.GetUsers();
+
+            return Ok(result);
+		}
 
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)

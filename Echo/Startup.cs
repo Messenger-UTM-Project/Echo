@@ -7,7 +7,8 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -25,10 +26,17 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 
 using Npgsql.EntityFrameworkCore.PostgreSQL;
+using ParkSquare.AspNetCore.Sitemap;
 
 using Echo.Data;
 using Echo.Hubs;
+using Echo.Roles;
+using Echo.Models;
+using Echo.Hashers;
+using Echo.Services;
+using Echo.Interfaces;
 using Echo.Middlewares;
+using Echo.Repositories;
 
 namespace Echo
 {
@@ -53,8 +61,8 @@ namespace Echo
                 app.UseHsts();
             }
 
-			var locOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
-			app.UseRequestLocalization(locOptions.Value);
+			var options = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
+			app.UseRequestLocalization(options.Value);
 
             app.UseNotFoundMiddleware();
 
@@ -74,10 +82,14 @@ namespace Echo
                 // Chat Hub
                 endpoints.MapHub<ChatHub>("/chatHub");
             });
+
+			app.UseSitemap();
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
+			services.AddSitemap();
+
 			services.AddLogging(builder =>
 			{
 				builder.AddConsole();
@@ -118,6 +130,8 @@ namespace Echo
 				options.LoginPath = "/login";
 				options.LogoutPath = "/logout";
 				options.AccessDeniedPath = "/403";
+				options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+				options.SlidingExpiration = true;
 			});
 
 			services.AddAuthorization(options =>
@@ -132,6 +146,19 @@ namespace Echo
 				  .Build();
 			});
 
+			services.AddIdentity<User, UserRole>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = false;
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 8;
+            })
+                .AddEntityFrameworkStores<AppDbContext>()
+				.AddDefaultUI()
+				.AddDefaultTokenProviders();
+
 			services.AddDbContext<AppDbContext>(options =>
 				options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -142,10 +169,7 @@ namespace Echo
 
 			services.AddSingleton<IStringLocalizerFactory, ResourceManagerStringLocalizerFactory>();
 
-			services.AddMvc();
-
-            services.AddControllers();
-            services.AddControllersWithViews()
+			services.AddMvc()
 				.AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
 				.AddDataAnnotationsLocalization()
 				.AddRazorRuntimeCompilation();
@@ -156,6 +180,15 @@ namespace Echo
                 options.MaximumReceiveMessageSize = 102400000;
             });
 
+			services.AddScoped<UserRepository>();
+
+			services.AddScoped<RoleManager<UserRole>>();
+			services.AddScoped<AppRoleManager>();
+
+			services.AddScoped<UserService>();
+			services.AddScoped<IUserServiceResult, UserServiceResult>();
+			services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+			services.AddScoped<SignInManager<User>, SignInManager<User>>();
 		}
     }
 }
