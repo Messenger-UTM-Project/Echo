@@ -1,16 +1,11 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
 using Microsoft.AspNetCore.Identity;
 
 using Echo.Models;
-using Echo.Services;
 using Echo.Repositories;
-using Echo.Interfaces;
 
-namespace Echo.Services 
+namespace Echo.Services
 {
-	public class UserService
+    public class UserService
 	{
 		private readonly UserRepository _userRepository;
 		private readonly UserManager<User> _userManager;	

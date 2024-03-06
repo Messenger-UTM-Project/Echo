@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 using Echo.Data;
@@ -7,7 +5,7 @@ using Echo.Models;
 
 namespace Echo.Repositories
 {
-	public class UserRepository
+    public class UserRepository
 	{
 		private readonly AppDbContext _dbContext;
 

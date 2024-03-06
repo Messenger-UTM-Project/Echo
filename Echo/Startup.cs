@@ -1,38 +1,20 @@
-using System;
-using System.Linq;
 using System.Globalization;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.AspNetCore.Mvc.Abstractions;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.Cookies;
-
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-
 using Microsoft.EntityFrameworkCore;
 
-using Npgsql.EntityFrameworkCore.PostgreSQL;
 using ParkSquare.AspNetCore.Sitemap;
 
 using Echo.Data;
 using Echo.Hubs;
 using Echo.Roles;
 using Echo.Models;
-using Echo.Hashers;
 using Echo.Services;
 using Echo.Interfaces;
 using Echo.Middlewares;
@@ -49,43 +31,7 @@ namespace Echo
 
         public IConfiguration Configuration { get; }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/error");
-                app.UseHsts();
-            }
-
-			var options = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
-			app.UseRequestLocalization(options.Value);
-
-            app.UseNotFoundMiddleware();
-
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
-            app.UseRouting();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                // Default routes
-                endpoints.MapControllers().RequireAuthorization();
-
-                // Chat Hub
-                endpoints.MapHub<ChatHub>("/chatHub");
-            });
-
-			app.UseSitemap();
-        }
-
+        
         public void ConfigureServices(IServiceCollection services)
         {
 			services.AddSitemap();
@@ -100,8 +46,10 @@ namespace Echo
             services.Configure<RequestLocalizationOptions>(options =>
 			{
 				string defaultCulture = "en";
+
 				var supportedCultures = new[] { defaultCulture, "ru" };
 				var cultures = supportedCultures.Select(culture => new CultureInfo(culture)).ToList();
+
 				options.DefaultRequestCulture = new RequestCulture(defaultCulture);
 				options.SupportedCultures = cultures;
 				options.SupportedUICultures = cultures;
@@ -190,5 +138,41 @@ namespace Echo
 			services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 			services.AddScoped<SignInManager<User>, SignInManager<User>>();
 		}
+
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptions<RequestLocalizationOptions> localizationOptions)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/error");
+                app.UseHsts();
+            }
+
+            app.UseNotFoundMiddleware();
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
+            app.UseRouting();
+
+            app.UseRequestLocalization(localizationOptions.Value);
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                // Default routes
+                endpoints.MapControllers().RequireAuthorization();
+
+                // Chat Hub
+                endpoints.MapHub<ChatHub>("/chatHub");
+            });
+
+            app.UseSitemap();
+        }
     }
 }

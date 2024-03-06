@@ -1,9 +1,3 @@
-using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Builder;
-
 namespace Echo.Middlewares
 {
     public class NotFoundMiddleware

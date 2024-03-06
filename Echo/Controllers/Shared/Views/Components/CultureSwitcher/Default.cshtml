@@ -3,10 +3,12 @@
 <div>
     <form id="culture-switcher">
         <select name="culture" id="culture-options" onchange="this.form.submit()">
-            <option></option>
-            @foreach (var culture in Model.SupportedCultures)
+            @if (Model.SupportedCultures != null)
             {
-                <option value="@culture.Name" selected="@(Model.CurrentUICulture.Name == culture.Name)">@culture.DisplayName</option>
+                foreach (var culture in Model.SupportedCultures)
+                {
+                    <option value="@culture.Name" selected="@(Model.CurrentUICulture != null && Model.CurrentUICulture.Name == culture.Name)">@culture.DisplayName</option>
+                }
             }
         </select>
     </form>

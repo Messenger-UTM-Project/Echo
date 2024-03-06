@@ -1,0 +1,26 @@
+﻿@using Microsoft.Extensions.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@using Echo.Resources
+
+@inject IStringLocalizer<SharedResources> Localizer
+
+<nav class="navbar">
+    <ul class="navbar-nav">
+        @{
+            bool isFirstLink = true;
+        }
+        @foreach (var link in Model)
+        {
+            <li class="@(isFirstLink ? "logo" : "nav-item")">
+                @{
+                    isFirstLink = false;
+                }
+                <a href="@link.RouteName" class="nav-link">
+                    <i class="nav-icon uil @link.IconClass"></i>
+                    <span class="link-text">@Localizer[link.Text]</span>
+                </a>
+            </li>
+        }
+    </ul>
+</nav>
