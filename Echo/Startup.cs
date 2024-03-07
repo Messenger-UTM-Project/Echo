@@ -60,6 +60,7 @@ namespace Echo
                 // {2} is area, {1} is controller,{0} is the action    
                 o.ViewLocationFormats.Clear();
                 o.ViewLocationFormats.Add("/Controllers/{1}/Views/{0}" + RazorViewEngine.ViewExtension);
+                o.ViewLocationFormats.Add("/Controllers/Shared/{0}" + RazorViewEngine.ViewExtension);
                 o.ViewLocationFormats.Add("/Controllers/Shared/Views/{0}" + RazorViewEngine.ViewExtension);
 
                 o.AreaViewLocationFormats.Clear();
@@ -121,6 +122,8 @@ namespace Echo
 				.AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
 				.AddDataAnnotationsLocalization()
 				.AddRazorRuntimeCompilation();
+
+			services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
 
             services.AddSignalR(options =>
             {
