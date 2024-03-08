@@ -17,7 +17,7 @@ services:
 
   dotnet_app:
     image: mcr.microsoft.com/dotnet/sdk:8.0
-    container_name: dotnet_app
+    container_name: dotnet-app
     restart: always
     depends_on:
       - postgres
