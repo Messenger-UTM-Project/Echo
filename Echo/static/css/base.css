@@ -172,7 +172,7 @@ select option {
   background-color: rgba(31, 32, 41, 0.8);
 }
 
-#language {
+#culture-switcher {
   position: relative;
   display: flex;
   justify-content: flex-end;

@@ -1,14 +1,14 @@
-class Cookies {
+export class Cookies {
 	static set = (cname, cvalue, exmin) => {
 		try {
 			var d = new Date();
 			d.setTime(d.getTime() + (exmin*60*1000));
 			var expires = "expires="+ d.toUTCString();
-			document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";}
+			document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/; SameSite=Strict; Secure";}
 		catch {
-			return "";
+			return false;
 		}
-		return "ok";
+		return true;
 	}
 
 	static get = cname => {
@@ -26,6 +26,6 @@ class Cookies {
 				return c.substring(name.length, c.length);
 			}
 		}
-		return "";
+		return null;
 	}
 }

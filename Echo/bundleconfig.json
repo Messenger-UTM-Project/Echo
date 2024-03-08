@@ -36,6 +36,17 @@
 		"sourceMap": false
 	},
 	{
+		"outputFileName": "wwwroot/js/theme.js",
+		"inputFiles": [
+			"static/js/theme.js"
+		],
+		"minify": {
+			"enabled": false,
+			"renameLocals": true
+		},
+		"sourceMap": false
+	},
+	{
 		"outputFileName": "wwwroot/js/chat.js",
 		"inputFiles": [
 			"static/js/message_handler.js"

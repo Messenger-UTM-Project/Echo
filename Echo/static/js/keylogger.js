@@ -1,4 +1,4 @@
-class Keylogger {
+export class Keylogger {
 	static #keys = [];
 	static #list = [];
 	static showKeys = false;

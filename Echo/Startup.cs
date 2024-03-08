@@ -3,6 +3,7 @@ using System.Globalization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
@@ -123,7 +124,10 @@ namespace Echo
 				.AddDataAnnotationsLocalization()
 				.AddRazorRuntimeCompilation();
 
-			services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
+			services.AddAntiforgery(options => 
+			{
+				options.HeaderName = "X-CSRF-TOKEN";
+			});
 
             services.AddSignalR(options =>
             {
@@ -137,7 +141,7 @@ namespace Echo
 			services.AddScoped<AppRoleManager>();
 
 			services.AddScoped<UserService>();
-			services.AddScoped<IUserServiceResult, UserServiceResult>();
+			services.AddScoped<IUserServiceResult<List<User>>, UserServiceResult<List<User>>>();
 			services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 			services.AddScoped<SignInManager<User>, SignInManager<User>>();
 		}
@@ -154,10 +158,30 @@ namespace Echo
                 app.UseHsts();
             }
 
+			app.Use(async (context, next) =>
+			{
+				context.Response.Headers.Append("Content-Security-Policy",
+					"default-src 'self'; " +
+					"script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com; " + 
+					"style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://unicons.iconscout.com; " + 
+					"img-src 'self' blob: https://upload.wikimedia.org ; " + 
+					"font-src 'self' https://fonts.gstatic.com https://unicons.iconscout.com; " + 
+					"connect-src 'self' https://api.cdnjs.com; " +
+					"upgrade-insecure-requests; " +
+					"block-all-mixed-content");
+				await next();
+			});
+
             app.UseNotFoundMiddleware();
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+			{
+				ContentTypeProvider = new FileExtensionContentTypeProvider
+				{
+					Mappings = { [".js"] = "application/javascript" }
+				}
+			});
 
             app.UseRouting();
 

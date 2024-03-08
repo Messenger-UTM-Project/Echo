@@ -1,10 +1,18 @@
+using Echo.Enum;
 using Echo.Interfaces;
 
 namespace Echo.Models
 {
-    public class UserServiceResult : IUserServiceResult
+    public class UserServiceResult<T> : IUserServiceResult<T> where T : class
 	{
-		public int StatusCode { get; set; }
-		public List<User>? Users { get; set; }
+		public HttpStatusCode StatusCode { get; set; } = HttpStatusCode.OK;
+		public T Result { get; set; } = default!;
+
+		public UserServiceResult() { }
+
+		public UserServiceResult(Action<UserServiceResult<T>> options)
+		{
+			options?.Invoke(this);
+		}
 	}
 }

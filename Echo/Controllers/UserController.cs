@@ -3,12 +3,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Localization;
 using Microsoft.EntityFrameworkCore;
 
+using ParkSquare.AspNetCore.Sitemap;
+
 using Echo.Data;
 using Echo.Models;
 using Echo.Services;
 
 namespace Echo.Controllers
 {
+	[SitemapExclude]
     [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]

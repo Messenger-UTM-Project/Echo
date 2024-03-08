@@ -1,10 +1,7 @@
-using Echo.Models;
-
 namespace Echo.Interfaces
 {
-    public interface IUserServiceResult
+	public interface IUserServiceResult<T> : IStatusCode where T : class
 	{
-		int StatusCode { get; }
-		List<User>? Users { get; }
+		T Result { get; set; }
 	}
 }

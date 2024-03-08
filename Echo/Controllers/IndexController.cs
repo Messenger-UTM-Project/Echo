@@ -67,17 +67,17 @@ namespace Echo.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("signin", Name = "SignIn")]
-        public string SignIn()
+        public IActionResult SignIn()
         {
-            return "Ok";
+            return Ok();
         }
 
         [AllowAnonymous]
         [HttpPost]
         [Route("signup", Name = "SignUp")]
-        public string SignUp()
+        public IActionResult SignUp()
         {
-            return "Ok";
+            return Ok();
         }
     }
 }

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
+using Echo.Enum;
 using Echo.Models;
 using Echo.Repositories;
 
@@ -16,18 +17,17 @@ namespace Echo.Services
 			_userManager = userManager;
 		}
 
-		public async Task<UserServiceResult> GetUsers()
+		public async Task<UserServiceResult<List<User>>> GetUsers()
 		{
 			var users = await _userRepository.GetUsersAsync();
+			var result = new UserServiceResult<List<User>>();
 
 			if (users.Count == 0)
-			{
-				return new UserServiceResult { StatusCode = 404, Users = null };
-			}
+				result.StatusCode = HttpStatusCode.NotFound;
 			else
-			{
-				return new UserServiceResult { StatusCode = 200, Users = users };
-			}
+				result.Result = users;
+
+			return result;
 		}
 
 		public async Task<bool> CreateUserAsync(string username, string password)

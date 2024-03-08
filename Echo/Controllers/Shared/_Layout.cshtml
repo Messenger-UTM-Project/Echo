@@ -1,3 +1,7 @@
+@{
+	string? theme = Context.Request.Cookies["theme"];
+}
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -17,13 +21,31 @@
 		<link rel="icon" type="/image/png" sizes="16x16" href="/images/favicon-16x16.png">
 		<link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<script type="module" src="/js/base.js"></script>
+		<script type="module" src="/js/theme.js"></script>
 		@await RenderSectionAsync("Head", required: false)
+		@if (!string.IsNullOrEmpty(theme))
+		{
+			if (theme == "dark")
+			{
+				<link rel="stylesheet" href="/css/dark.css"/>
+			}
+			else if (theme == "light")
+			{
+				<link rel="stylesheet" href="/css/light.css"/>
+			}
+			else
+			{
+				<link rel="stylesheet" href="/css/dark.css"/>
+			}
+		}
 		<link rel="stylesheet" href="/css/base.css"/>
 	</head>
 	<body translate="no">
 		@await Component.InvokeAsync("CultureSwitcher")
 		@RenderBody()
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.11/signalr.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=AM_CHTML"></script>
 		@await RenderSectionAsync("Scripts", required: false)
 	</body>
 </html>
