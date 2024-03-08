@@ -74,10 +74,17 @@ node_modules/
 # Ignore Webpack related files
 dist/
 
-Docs/
+# Ignore backup and session files for vim
 *.tmp
 *.vim
-db.json
+
+# Ignore docs and migrations
+Docs/
 Migrations/
+
+# Ignore private DB settings
+db.json
+
+# Ignore bundle generation output
 Echo/wwwroot/css
 Echo/wwwroot/js

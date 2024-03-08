@@ -21,4 +21,7 @@
     - `docker compose up`
 2. **Manual**
     - Set up postgreSQL DB and create/edit `db.json`
-    - `export PATH="$PATH:/home/dustyn/.dotnet/tools" && dotnet tool install dotnet-ef -g && dotnet ef migrations add InitialCreate && make launch`
+    - `dotnet tool install dotnet-ef --version 8.0.1 && 
+        dotnet dotnet-ef migrations add InitialCreate || true && 
+        dotnet dotnet-ef database update && 
+        make launch`

@@ -10,7 +10,7 @@ services:
       POSTGRES_USER: test
       POSTGRES_PASSWORD: test
     ports:
-      - "5080:5432"
+      - "5002:5432"
     networks:
       network:
         ipv4_address: 172.29.5.4
@@ -26,13 +26,15 @@ services:
       - .:/app
     command: >
       bash -c "
-        export PATH="$PATH:/root/.dotnet/tools" &&
-        dotnet tool install --global dotnet-ef &&
-        dotnet ef database update --project Echo &&
-        dotnet run --urls=http://0.0.0.0:5000 --project Echo
+        cd Echo
+        dotnet tool install dotnet-ef --version 8.0.1 && 
+        dotnet dotnet-ef migrations add InitialCreate || true && 
+        dotnet dotnet-ef database update &&
+        dotnet run
       "
     ports:
-      - "5081:5000"
+      - "5000:5000"
+      - "5001:5001"
     networks:
       network:
         ipv4_address: 172.29.5.5
