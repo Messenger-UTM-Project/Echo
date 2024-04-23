@@ -20,12 +20,13 @@ namespace Echo.Data
         {
 			base.OnModelCreating(builder);
 
-            builder.Entity<User>()
-                .HasKey(e => e.Id);
+            builder.Entity<User>(b =>
+			{
+                b.HasKey(e => e.Id);
 
-			builder.Entity<User>()
-				.HasIndex(u => u.UserName)
+				b.HasIndex(u => u.UserName)
 				.IsUnique();
+			});
 
 			builder.Entity<UserRole>().HasData(
 				new UserRole { Id = Guid.NewGuid(), ConcurrencyStamp = "1", RoleID = 1, Name = "Admin", NormalizedName = "ADMIN" },

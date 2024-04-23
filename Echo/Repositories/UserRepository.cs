@@ -18,5 +18,10 @@ namespace Echo.Repositories
 		{
 			return await _dbContext.Users.ToListAsync();
 		}
+		
+		public async Task<User> FindByIdAsync(Guid id)
+		{
+			return await _dbContext.Users.FindAsync(id);
+		}
 	}
 }

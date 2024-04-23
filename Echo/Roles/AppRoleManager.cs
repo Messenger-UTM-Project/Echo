@@ -25,12 +25,11 @@ namespace Echo.Roles
 			}
 		}
 
-		public async Task AssignRoleToUser(string userId, string roleName)
+		public async Task AssignRoleToUser(User user, string roleName)
 		{
-			var user = await _userManager.FindByIdAsync(userId);
 			if (user == null)
 			{
-				throw new ApplicationException($"User with ID '{userId}' not found.");
+				throw new ApplicationException($"User not found.");
 			}
 
 			var role = await _roleManager.FindByNameAsync(roleName);
@@ -40,6 +39,12 @@ namespace Echo.Roles
 			}
 
 			await _userManager.AddToRoleAsync(user, roleName);
+		}
+
+		public async Task AssignRoleToUser(string userId, string roleName)
+		{
+			var user = await _userManager.FindByIdAsync(userId);
+			await this.AssignRoleToUser(user, roleName);
 		}
 
 		public async Task<bool> UserIsInRole(string userId, string roleName)

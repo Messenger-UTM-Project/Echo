@@ -24,6 +24,18 @@
 		"sourceMap": false
 	},
 	{
+		"outputFileName": "wwwroot/css/index.css",
+		"inputFiles": [
+			"static/css/index.css",
+			"static/css/forms.css"
+		],
+		"minify": {
+			"enabled": false,
+			"renameLocals": true
+		},
+		"sourceMap": false
+	},
+	{
 		"outputFileName": "wwwroot/js/base.js",
 		"inputFiles": [
 			"static/js/keylogger.js",

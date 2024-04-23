@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Localization;
 
 using Echo.Data;
+using Echo.Models;
+using Echo.Services;
 
 namespace Echo.Controllers
 {
@@ -10,11 +12,13 @@ namespace Echo.Controllers
     public class IndexController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly UserService _userService;
         private readonly IStringLocalizer<IndexController> _localizer;
 
-        public IndexController(AppDbContext context, IStringLocalizer<IndexController> localizer)
+        public IndexController(AppDbContext context, UserService userService, IStringLocalizer<IndexController> localizer)
         {
             _context = context;
+			_userService = userService;
             _localizer = localizer;
         }
 
@@ -22,6 +26,8 @@ namespace Echo.Controllers
         [Route("", Name = "Index")]
         public IActionResult Index()
         {
+			string name = User.Identity.Name;
+			ViewBag.Name = name;
             return View();
         }
 
@@ -52,32 +58,80 @@ namespace Echo.Controllers
         [AllowAnonymous]
         [HttpGet]
         [Route("login", Name = "Login")]
-        public IActionResult LoginPage()
+        public IActionResult Login()
         {
-            return View();
+			if (_userService.IsAuthenticated(User))
+			{
+				return RedirectToAction("Index");
+			}
+			else
+			{
+				var model = new LoginViewModel();
+				return View(model);
+			}
         }
 
         [HttpGet]
         [Route("logout", Name = "Logout")]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            return View();
+			await _userService.LogoutAsync();
+			return RedirectToAction("Index");
         }
 
         [AllowAnonymous]
         [HttpPost]
+		[ValidateAntiForgeryToken]
         [Route("signin", Name = "SignIn")]
-        public IActionResult SignIn()
+        public async Task<IActionResult> SignIn(LoginViewModel model)
         {
-            return Ok();
+			if (_userService.IsAuthenticated(User))
+			{
+				return RedirectToAction("Index");
+			}
+			else
+			{
+				var result = await _userService.AuthenticateAsync(model.SignInUsername, model.SignInPassword);
+				
+				if (result.Succeeded)
+				{
+					return RedirectToAction("index");
+				}
+				else
+				{
+					ModelState.AddModelError("SignInPassword", "Invalid username or password.");
+					return View("Login");
+				}
+			}
         }
 
         [AllowAnonymous]
         [HttpPost]
+		[ValidateAntiForgeryToken]
         [Route("signup", Name = "SignUp")]
-        public IActionResult SignUp()
+        public async Task<IActionResult> SignUp(LoginViewModel model)
         {
-            return Ok();
+			if (_userService.IsAuthenticated(User))
+			{
+				return RedirectToAction("index");
+			}
+			else
+			{
+				var result = await _userService.CreateUserAsync(model.Name, model.Username, model.Password);
+				
+				if (result.Succeeded)
+				{
+					return RedirectToAction("index");
+				}
+				else
+				{
+					foreach (var error in result.Errors)
+					{
+						ModelState.AddModelError("Password", error.Description);
+					}
+					return View("Login");
+				}
+			}
         }
     }
 }

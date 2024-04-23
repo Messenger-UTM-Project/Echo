@@ -129,6 +129,13 @@ namespace Echo
 				options.HeaderName = "X-CSRF-TOKEN";
 			});
 
+			services.AddAntiforgery(options =>
+			{
+				options.FormFieldName = "AntiforgeryFieldname";
+				options.HeaderName = "X-CSRF-TOKEN-HEADERNAME";
+				options.SuppressXFrameOptionsHeader = false;
+			});
+
             services.AddSignalR(options =>
             {
                 options.EnableDetailedErrors = true;
@@ -186,6 +193,8 @@ namespace Echo
             app.UseRouting();
 
             app.UseRequestLocalization(localizationOptions.Value);
+
+			app.UseAntiforgery();
 
             app.UseAuthentication();
             app.UseAuthorization();

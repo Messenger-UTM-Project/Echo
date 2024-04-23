@@ -1,0 +1,40 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers;
+@using Microsoft.AspNetCore.Mvc.ViewFeatures;
+@using Microsoft.Extensions.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@using Echo.Controllers
+@using Echo.Models
+
+@inject IStringLocalizer<TestController> Localizer
+
+@{
+	Layout = "/Controllers/Shared/_Layout.cshtml";
+	
+	ViewData["Title"] = Localizer["Test"];
+	ViewData["Description"] = Localizer["Test"];
+	ViewData["currentUrl"] = $"{ViewContext.HttpContext.Request.Scheme}://{ViewContext.HttpContext.Request.Host}{ViewContext.HttpContext.Request.Path}{ViewContext.HttpContext.Request.QueryString}";
+
+	var links = new List<NavbarLink>
+	{
+		new NavbarLink { RouteName = "Index", IconClass = "uil-code-branch", Text = "Home" },
+		new NavbarLink { RouteName = "Profile", IconClass = "uil-chat-bubble-user" },
+		new NavbarLink { RouteName = "Logout", IconClass = "uil-signout" }
+	};
+}
+
+@section Head {
+	<link rel="stylesheet" href="/css/login.css"/>
+}
+
+@section Scripts {
+	<script src="/js/chat.js"></script>
+}
+
+
+@await Component.InvokeAsync("Navbar", new { links = links, viewContext = ViewContext })
+<main>
+	<div class="container">
+		<p>@Localizer[ViewBag.Name]</p>
+	</div>
+</main>
