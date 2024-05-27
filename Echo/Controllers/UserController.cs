@@ -31,9 +31,9 @@ namespace Echo.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
-			var result = await _service.GetUsers();
+			var result = await _service.GetUsersAsync();
 
-            return Ok(result);
+            return Ok(result.Result);
 		}
 
         [HttpGet("{id}")]

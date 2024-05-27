@@ -1,0 +1,13 @@
+:root {
+  --color-scheme: dark;
+  --bg-color-primary: #1f2029;
+  --bg-color-primary-rgb: 31, 32, 41;
+  --bg-color-secondary: #2a2b38;
+  --bg-color-secondary-rgb: 42, 43, 56;
+  --fg-color-primary: #c4c3ca;
+  --fg-color-primary-rgb: 196, 195, 202;
+  --fg-color-secondary: #7b7989;
+  --fg-color-secondary-rgb: 123, 121, 137;
+  --box-shadow-color-primary: #141414;
+  --box-shadow-color-primary-rgb: 20, 20, 20;
+}

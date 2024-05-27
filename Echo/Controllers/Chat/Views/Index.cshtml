@@ -6,7 +6,7 @@
 @using Echo.Controllers
 @using Echo.Models
 
-@model List<User>
+@model List<Chat>
 
 @inject IStringLocalizer<IndexController> _
 
@@ -21,13 +21,12 @@
 	{
 		new NavbarLink { RouteName = "Index", IconClass = "uil-code-branch", Text = "Home" },
 		new NavbarLink { RouteName = "Profile", IconClass = "uil-chat-bubble-user" },
-		new NavbarLink { RouteName = "Chats", IconClass = "uil-chat" },
 		new NavbarLink { RouteName = "Logout", IconClass = "uil-signout" }
 	};
 }
 
 @section Head {
-	<link rel="stylesheet" href="/css/index.css"/>
+	<link rel="stylesheet" href="/css/chat.css"/>
 }
 
 @section Scripts {
@@ -38,15 +37,27 @@
 @await Component.InvokeAsync("Navbar", new { links = links, viewContext = ViewContext })
 <main>
 	<div class="container">
-		<h1 class="header">Users</h1>
-		<div class="users"/>
-		@foreach (var user in Model)
+		<h1 class="header">Chats</h1>
+		<div class="chats"/>
+		@foreach (var chat in Model)
         {
-			<a class="user" href="">
-				<i class="input-icon uil uil-user user-icon"></i>
-				<div id="@user.Id" class="info">
-					<div class="name">@user.Name</div>
-					<div class="username">@user.UserName</div>
+            var lastMessage = chat.Messages.OrderByDescending(m => m.CreatedAt).FirstOrDefault();
+			<a class="chat" href="">
+				<i class="input-icon uil uil-chat chat-icon"></i>
+				<div id="@chat.Id" class="info">
+					<div class="name">@chat.Name</div>
+					<div class="message">
+					@if (lastMessage != null)
+					{
+						<div class="content">@lastMessage.User.UserName: @lastMessage.Content</div>
+						<div class="date">@lastMessage.CreatedAt.ToString("g")</div>
+					}
+					else
+					{
+						<div class="content">@_["No messages yet"]</div>
+						<div class="date">@_["N/A"]</div>
+					}
+					</div>
 				</div>
 			</a>
         }

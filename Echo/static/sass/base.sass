@@ -125,10 +125,10 @@ select
   font: inherit
   font-size: 0.85em
   padding: 0.75em 4em 0.75em 0.75em
-  background: $arrow-icon no-repeat right 0.8em center / 1.4em, linear-gradient(to left, rgba($fg-color-primary, 0.3) 3em, rgba($fg-color-primary, 0.2) 3em)
+  background: $arrow-icon no-repeat right 0.8em center / 1.4em, linear-gradient(to left, rgba($fg-color-primary-rgb, 0.3) 3em, rgba($fg-color-primary-rgb, 0.2) 3em)
   color: $fg-color-primary
   border-radius: 0.25em
-  box-shadow: 0 0 1em 0 rgba($box-shadow-color-primary, 0.2)
+  box-shadow: 0 0 1em 0 rgba($box-shadow-color-primary-rgb, 0.2)
   cursor: pointer
 
   &::-ms-expand
@@ -139,7 +139,7 @@ select
 
   option
     color: inherit
-    background-color: rgba($bg-color-primary, 0.8)
+    background-color: rgba($bg-color-primary-rgb, 0.8)
 
 #culture-switcher
   position: relative
@@ -173,4 +173,4 @@ select
   background-clip: content-box
 
   &:hover
-    background-color: lighten($fg-color-primary, 10%)
+    background-color: $fg-color-secondary

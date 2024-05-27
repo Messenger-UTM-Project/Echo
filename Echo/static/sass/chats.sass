@@ -18,17 +18,18 @@
   font-size: 1.2em
   text-align: center
 
-.user .user-icon 
+.chat .chat-icon 
   font-size: 1.75em
 
-.username
+.message 
+  & .content
+    font-size: 1em
+
+.date
   font-size: 0.8em
   color: $btn-bg-color-primary
 
-.name, .username
-  text-align: center
-
-.users
+.chats
   display: grid
   flex-direction: column
   gap: 1.5em
@@ -37,9 +38,9 @@
     grid-template-columns: repeat(auto-fill, minmax(12em, 1fr))
 
   @include media("min-width: 768px") 
-    grid-template-columns: repeat(auto-fill, minmax(16em, 1fr))
+    grid-template-columns: repeat(auto-fill, minmax(20em, 1fr))
 
-.user
+.chat
   display: flex
   align-content: stretch
   gap: 1em
@@ -64,10 +65,10 @@
   &:hover
     box-shadow: rgba($box-shadow-color-primary-rgb, 0.6) 0px 7px 12px 0px
 
-  & .name
+  & .content
     @include prefix(transition, color $transition-speed linear, webkit)
 
-.user-icon
+.chat-icon
   display: flex !important
   align-self: center
 
@@ -80,8 +81,14 @@
 .info 
   display: flex
   flex-direction: column
+  gap: 0.5em
   margin-left: auto
   margin-right: auto
 
   @include media("max-width: 768px") 
     text-align: center
+
+.message
+    display: flex
+    flex-direction: column
+    align-items: center

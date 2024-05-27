@@ -18,36 +18,36 @@
   text-align: center;
 }
 
-.user .user-icon {
+.chat .chat-icon {
   font-size: 1.75em;
 }
 
-.username {
+.message .content {
+  font-size: 1em;
+}
+
+.date {
   font-size: 0.8em;
   color: #ffeba7;
 }
 
-.name, .username {
-  text-align: center;
-}
-
-.users {
+.chats {
   display: grid;
   flex-direction: column;
   gap: 1.5em;
 }
 @media only screen and (max-width: 768px) {
-  .users {
+  .chats {
     grid-template-columns: repeat(auto-fill, minmax(12em, 1fr));
   }
 }
 @media only screen and (min-width: 768px) {
-  .users {
-    grid-template-columns: repeat(auto-fill, minmax(16em, 1fr));
+  .chats {
+    grid-template-columns: repeat(auto-fill, minmax(20em, 1fr));
   }
 }
 
-.user {
+.chat {
   display: flex;
   align-content: stretch;
   gap: 1em;
@@ -63,27 +63,27 @@
   box-shadow: rgba(var(--box-shadow-color-primary-rgb), 0.4) 0px 7px 12px 0px;
 }
 @media only screen and (max-width: 768px) {
-  .user {
+  .chat {
     flex-direction: column;
   }
-  .user i:last-child {
+  .chat i:last-child {
     margin-left: auto;
   }
 }
 @media only screen and (min-width: 768px) {
-  .user {
+  .chat {
     flex-direction: row;
   }
 }
-.user:hover {
+.chat:hover {
   box-shadow: rgba(var(--box-shadow-color-primary-rgb), 0.6) 0px 7px 12px 0px;
 }
-.user .name {
+.chat .content {
   -webkit-transition: color 200ms linear;
   transition: color 200ms linear;
 }
 
-.user-icon {
+.chat-icon {
   display: flex !important;
   align-self: center;
 }
@@ -98,6 +98,7 @@
 .info {
   display: flex;
   flex-direction: column;
+  gap: 0.5em;
   margin-left: auto;
   margin-right: auto;
 }
@@ -105,4 +106,10 @@
   .info {
     text-align: center;
   }
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

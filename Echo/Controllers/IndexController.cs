@@ -13,22 +13,24 @@ namespace Echo.Controllers
     {
         private readonly AppDbContext _context;
         private readonly UserService _userService;
+        private readonly ChatService _chatService;
         private readonly IStringLocalizer<IndexController> _localizer;
 
-        public IndexController(AppDbContext context, UserService userService, IStringLocalizer<IndexController> localizer)
+        public IndexController(AppDbContext context, UserService userService, ChatService chatService, IStringLocalizer<IndexController> localizer)
         {
             _context = context;
 			_userService = userService;
+			_chatService = chatService;
             _localizer = localizer;
         }
 
         [HttpGet]
         [Route("", Name = "Index")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-			string name = User.Identity.Name;
-			ViewBag.Name = name;
-            return View();
+			ViewBag.Name = User.Identity.Name;
+			var users = await _userService.GetUsersAsync();
+			return View(users.Result);
         }
 
         [AllowAnonymous]
@@ -93,7 +95,7 @@ namespace Echo.Controllers
 			{
 				var result = await _userService.AuthenticateAsync(model.SignInUsername, model.SignInPassword);
 				
-				if (result.Succeeded)
+				if (result.Result.Succeeded)
 				{
 					return RedirectToAction("index");
 				}

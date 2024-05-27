@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="Login" xml:space="preserve">
+    <value>Логин</value>
+  </data>
+  <data name="SUBMIT" xml:space="preserve">
+    <value>ОТПРАВИТЬ</value>
+  </data>
+  <data name="Log In" xml:space="preserve">
+    <value>Вход</value>
+  </data>
+  <data name="Sign Up" xml:space="preserve">
+    <value>Регистрация</value>
+  </data>
+  <data name="Your Username" xml:space="preserve">
+    <value>Ваше Имя Пользователя</value>
+  </data>
+  <data name="Your Password" xml:space="preserve">
+    <value>Ваш Пароль</value>
+  </data>
+  <data name="Your Full Name" xml:space="preserve">
+    <value>Ваше Полное Имя</value>
+  </data>
+  <data name="Confirm Password" xml:space="preserve">
+    <value>Подтверждение Пароля</value>
+  </data>
+</root>

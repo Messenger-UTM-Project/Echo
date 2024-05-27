@@ -3,14 +3,14 @@ using Echo.Interfaces;
 
 namespace Echo.Models
 {
-    public class UserServiceResult<T> : IUserServiceResult<T> where T : class
+    public class ServiceResult<T> : IServiceResult<T> where T : class
 	{
 		public HttpStatusCode StatusCode { get; set; } = HttpStatusCode.OK;
 		public T Result { get; set; } = default!;
 
-		public UserServiceResult() { }
+		public ServiceResult() { }
 
-		public UserServiceResult(Action<UserServiceResult<T>> options)
+		public ServiceResult(Action<ServiceResult<T>> options)
 		{
 			options?.Invoke(this);
 		}

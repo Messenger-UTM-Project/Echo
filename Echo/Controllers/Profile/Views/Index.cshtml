@@ -8,48 +8,58 @@
 
 @model List<User>
 
-@inject IStringLocalizer<IndexController> _
+@inject IStringLocalizer<IndexController> Localizer
 
 @{
 	Layout = "/Controllers/Shared/_Layout.cshtml";
 	
-	ViewData["Title"] = _["Main"];
-	ViewData["Description"] = _["Main"];
+	ViewData["Title"] = Localizer["Profile"];
+	ViewData["Description"] = Localizer["Profile"];
 	ViewData["currentUrl"] = $"{ViewContext.HttpContext.Request.Scheme}://{ViewContext.HttpContext.Request.Host}{ViewContext.HttpContext.Request.Path}{ViewContext.HttpContext.Request.QueryString}";
 
 	var links = new List<NavbarLink>
 	{
 		new NavbarLink { RouteName = "Index", IconClass = "uil-code-branch", Text = "Home" },
-		new NavbarLink { RouteName = "Profile", IconClass = "uil-chat-bubble-user" },
 		new NavbarLink { RouteName = "Chats", IconClass = "uil-chat" },
 		new NavbarLink { RouteName = "Logout", IconClass = "uil-signout" }
 	};
 }
 
 @section Head {
-	<link rel="stylesheet" href="/css/index.css"/>
+	<link rel="stylesheet" href="/css/profile.css"/>
 }
 
 @section Scripts {
-	<script type="module" src="/js/api.js"></script>
+	<script type="module" src="/js/chat.js"></script>
 }
-
 
 @await Component.InvokeAsync("Navbar", new { links = links, viewContext = ViewContext })
 <main>
 	<div class="container">
-		<h1 class="header">Users</h1>
-		<div class="users"/>
-		@foreach (var user in Model)
-        {
-			<a class="user" href="">
-				<i class="input-icon uil uil-user user-icon"></i>
-				<div id="@user.Id" class="info">
-					<div class="name">@user.Name</div>
-					<div class="username">@user.UserName</div>
+		<div class="profile">
+			<div class="header">
+				<div class="image" style="background-image: url('@Localizer[ViewBag.ProfileImagePath]');">
+					<div class="overlay editProfilePicture">
+						<i class="uil uil-image-edit"></i>
+					</div>
 				</div>
-			</a>
-        }
+				<div class="info">
+					<div class="name">@Localizer[ViewBag.Name]</div>
+					<div class="username">@Localizer[ViewBag.UserName]</div>
+				</div>
+				<div class="buttons">
+					<i class="uil uil-edit btn"></i>
+				</div>
+			</div>
+			<div class="main" style="white-space: break-spaces;">
+				@foreach (var friend in Model)
+				{
+					<tr>
+						<td>@friend.Name</td>
+						<td>@friend.UserName</td>
+					</tr>
+				}
+			</div>
 		</div>
 	</div>
 </main>

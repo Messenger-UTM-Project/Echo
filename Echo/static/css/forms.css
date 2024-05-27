@@ -37,9 +37,9 @@
   padding: 0.8em 1.4em;
   position: relative;
   border-radius: 0.3em;
-  background-color: #1f2029;
-  -webkit-box-shadow: rgba(20, 20, 20, 0.3) 0px 7px 29px 0px;
-  box-shadow: rgba(20, 20, 20, 0.3) 0px 7px 29px 0px;
+  background-color: var(--bg-color-primary);
+  -webkit-box-shadow: rgba(var(--box-shadow-color-primary-rgb), 0.3) 0px 7px 29px 0px;
+  box-shadow: rgba(var(--box-shadow-color-primary-rgb), 0.3) 0px 7px 29px 0px;
   -webkit-transition: box-shadow 200ms linear;
   transition: box-shadow 200ms linear;
 }
@@ -48,7 +48,7 @@
   padding: 0;
   letter-spacing: 0.5px;
   outline: none;
-  color: #c4c3ca;
+  color: var(--fg-color-primary);
   background-color: transparent;
   border: none;
   -webkit-transition: box-shadow 200ms linear;
@@ -71,7 +71,7 @@
 }
 
 .form-group input::-webkit-input-placeholder, .form-group input::-webkit-placeholder, .form-group input::-moz-input-placeholder, .form-group input::-moz-placeholder, .form-group input::-ms-input-placeholder, .form-group input::-ms-placeholder {
-  color: #c4c3ca;
+  color: var(--fg-color-primary);
   opacity: 0.7;
   -webkit-transition-property: color, opacity;
   transition-property: color, opacity;
@@ -84,7 +84,7 @@
   opacity: 0;
 }
 .form-group:focus-within {
-  box-shadow: rgba(20, 20, 20, 0.5) 0px 7px 29px 0px;
+  box-shadow: rgba(var(--box-shadow-color-primary-rgb), 0.5) 0px 7px 29px 0px;
 }
 
 .disabled {

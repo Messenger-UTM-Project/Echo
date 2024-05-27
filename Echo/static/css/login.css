@@ -1,5 +1,5 @@
 .link {
-  color: #c4c3ca;
+  color: var(--fg-color-primary);
 }
 .link:hover {
   color: #ffeba7;
@@ -18,7 +18,7 @@ ul {
 h4 {
   font-size: 1.65em;
   font-weight: 600;
-  color: #c4c3ca !important;
+  color: var(--fg-color-primary) !important;
 }
 
 h6 {
@@ -28,7 +28,7 @@ h6 span {
   padding: 0 1.4em;
   text-transform: uppercase;
   font-weight: 700;
-  color: #c4c3ca !important;
+  color: var(--fg-color-primary) !important;
 }
 
 .section {
@@ -128,7 +128,7 @@ h6 span {
   grid-row-start: 1;
   grid-column-end: 1;
   grid-column-start: 1;
-  background-color: #2a2b38;
+  background-color: var(--bg-color-secondary);
   background-image: url("../../images/pat.svg");
   background-position: bottom center;
   background-repeat: no-repeat;

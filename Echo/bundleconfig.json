@@ -3,7 +3,8 @@
 		"outputFileName": "wwwroot/css/base.css",
 		"inputFiles": [
 			"static/css/base.css",
-			"static/css/navbar.css"
+			"static/css/navbar.css",
+			"static/css/context_menu.css"
 		],
 		"minify": {
 			"enabled": false,
@@ -36,10 +37,57 @@
 		"sourceMap": false
 	},
 	{
+		"outputFileName": "wwwroot/css/chats.css",
+		"inputFiles": [
+			"static/css/chats.css",
+			"static/css/forms.css"
+		],
+		"minify": {
+			"enabled": false,
+			"renameLocals": true
+		},
+		"sourceMap": false
+	},
+	{
+		"outputFileName": "wwwroot/css/profile.css",
+		"inputFiles": [
+			"static/css/profile.css",
+			"static/css/forms.css"
+		],
+		"minify": {
+			"enabled": false,
+			"renameLocals": true
+		},
+		"sourceMap": false
+	},
+	{
+		"outputFileName": "wwwroot/css/dark.css",
+		"inputFiles": [
+			"static/css/dark.css"
+		],
+		"minify": {
+			"enabled": false,
+			"renameLocals": true
+		},
+		"sourceMap": false
+	},
+	{
+		"outputFileName": "wwwroot/css/light.css",
+		"inputFiles": [
+			"static/css/light.css"
+		],
+		"minify": {
+			"enabled": false,
+			"renameLocals": true
+		},
+		"sourceMap": false
+	},
+	{
 		"outputFileName": "wwwroot/js/base.js",
 		"inputFiles": [
 			"static/js/keylogger.js",
-			"static/js/cookies.js"
+			"static/js/cookies.js",
+			"static/js/context_menu.js"
 		],
 		"minify": {
 			"enabled": false,
@@ -61,7 +109,30 @@
 	{
 		"outputFileName": "wwwroot/js/chat.js",
 		"inputFiles": [
-			"static/js/message_handler.js"
+			"static/js/chat_handler.js"
+		],
+		"minify": {
+			"enabled": false,
+			"renameLocals": true
+		},
+		"sourceMap": false
+	},
+	{
+		"outputFileName": "wwwroot/js/friendship.js",
+		"inputFiles": [
+			"static/js/friendship_handler.js"
+		],
+		"minify": {
+			"enabled": false,
+			"renameLocals": true
+		},
+		"sourceMap": false
+	},
+	{
+		"outputFileName": "wwwroot/js/api.js",
+		"inputFiles": [
+			"static/js/chat_handler.js",
+			"static/js/friendship_handler.js"
 		],
 		"minify": {
 			"enabled": false,

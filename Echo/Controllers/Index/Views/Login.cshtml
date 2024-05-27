@@ -8,13 +8,13 @@
 @using Echo.Controllers
 @using Echo.Models
 
-@inject IStringLocalizer<IndexController> Localizer
+@inject IStringLocalizer<IndexController> _
 
 @{
 	Layout = "/Controllers/Shared/_Layout.cshtml";
 	
-	ViewData["Title"] = Localizer["Login"];
-	ViewData["Description"] = Localizer["Login"];
+	ViewData["Title"] = _["Login"];
+	ViewData["Description"] = _["Login"];
 	ViewData["currentUrl"] = $"{ViewContext.HttpContext.Request.Scheme}://{ViewContext.HttpContext.Request.Host}{ViewContext.HttpContext.Request.Path}{ViewContext.HttpContext.Request.QueryString}";
 }
 
@@ -27,7 +27,7 @@
 <div class="container">
 	<div class="text-center align-self-center centrify">
 		<div class="section">
-			<h6 class="mb-0 pb-3"><span>Log In </span><span>Sign Up</span></h6>
+			<h6 class="mb-0 pb-3"><span>@_["Log In"] </span><span>@_["Sign Up"]</span></h6>
 			<input class="hidden-checkbox" type="checkbox" id="reg-log" name="reg-log">
 			<label for="reg-log"></label>
 			<div class="card-3d-wrap mx-auto">
@@ -35,13 +35,13 @@
 					<div class="card-front">
 						<div class="center-wrap">
 							<div class="section">
-								<h4 class="mb-4 pb-3">Log In</h4>
+								<h4 class="mb-4 pb-3">@_["Log In"]</h4>
 								@using (Html.BeginForm("SignIn", "Index", FormMethod.Post, new { @class = "vert-form" }))
 								{
 									@Html.AntiForgeryToken()
 									<div class="form-group">
 										<i class="input-icon uil uil-user"></i>
-										@Html.TextBoxFor(m => m.SignInUsername, new { @class = "form-style", autocomplete = "off", placeholder="Your Username" })
+										@Html.TextBoxFor(m => m.SignInUsername, new { @class = "form-style", autocomplete = "off", placeholder=@_["Your Username"] })
 									</div>
 									@if (ViewData.ModelState.ContainsKey("SignInUsername") && ViewData.ModelState["SignInUsername"].Errors.Count > 0)
 									{
@@ -54,7 +54,7 @@
 									}
 									<div class="form-group">
 										<i class="input-icon uil uil-lock-alt"></i>
-										@Html.PasswordFor(m => m.SignInPassword, new { @class = "form-style", autocomplete = "off", placeholder="Your Password" })
+										@Html.PasswordFor(m => m.SignInPassword, new { @class = "form-style", autocomplete = "off", placeholder=@_["Your Password"] })
 									</div>
 									@if (ViewData.ModelState.ContainsKey("SignInPassword") && ViewData.ModelState["SignInPassword"].Errors.Count > 0)
 									{
@@ -65,7 +65,7 @@
 										}
 										</ul>
 									}
-									<button type="submit" class="btn mt-4">SUBMIT</button>
+									<button type="submit" class="btn mt-4">@_["SUBMIT"]</button>
 								}
 							</div>
 						</div>
@@ -73,13 +73,13 @@
 					<div class="card-back">
 						<div class="center-wrap">
 							<div class="section">
-								<h4 class="mb-4 pb-3">Sign Up</h4>
+								<h4 class="mb-4 pb-3">@_["Sign Up"]</h4>
 								@using (Html.BeginForm("SignUp", "Index", FormMethod.Post, new { @class = "vert-form" }))
 								{
 									@Html.AntiForgeryToken()
 									<div class="form-group">
 										<i class="input-icon uil uil-user"></i>
-										@Html.TextBoxFor(m => m.Name, new { @class = "form-style", autocomplete = "off", placeholder = "Your Full Name" })
+										@Html.TextBoxFor(m => m.Name, new { @class = "form-style", autocomplete = "off", placeholder = @_["Your Full Name"] })
 									</div>
 									@if (ViewData.ModelState.ContainsKey("Name") && ViewData.ModelState["Name"].Errors.Count > 0)
 									{
@@ -92,7 +92,7 @@
 									}
 									<div class="form-group">
 										<i class="input-icon uil uil-user"></i>
-										@Html.TextBoxFor(m => m.Username, new { @class = "form-style", autocomplete = "off", placeholder = "Your Username" })
+										@Html.TextBoxFor(m => m.Username, new { @class = "form-style", autocomplete = "off", placeholder = @_["Your Username"] })
 									</div>
 									@if (ViewData.ModelState.ContainsKey("Username") && ViewData.ModelState["Username"].Errors.Count > 0)
 									{
@@ -105,7 +105,7 @@
 									}
 									<div class="form-group">
 										<i class="input-icon uil uil-lock-alt"></i>
-										@Html.PasswordFor(m => m.Password, new { @class = "form-style", autocomplete = "off", placeholder = "Your Password" })
+										@Html.PasswordFor(m => m.Password, new { @class = "form-style", autocomplete = "off", placeholder = @_["Your Password"] })
 									</div>
 									@if (ViewData.ModelState.ContainsKey("Password") && ViewData.ModelState["Password"].Errors.Count > 0)
 									{
@@ -118,7 +118,7 @@
 									}
 									<div class="form-group">
 										<i class="input-icon uil uil-lock-alt"></i>
-										@Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-style", autocomplete = "off", placeholder = "Confirm Password" })
+										@Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-style", autocomplete = "off", placeholder = @_["Confirm Password"] })
 									</div>
 									@if (ViewData.ModelState.ContainsKey("ConfirmPassword") && ViewData.ModelState["ConfirmPassword"].Errors.Count > 0)
 									{
@@ -129,7 +129,7 @@
 										}
 										</ul>
 									}
-									<button type="submit" class="btn mt-2">SUBMIT</button>
+									<button type="submit" class="btn mt-2">@_["SUBMIT"]</button>
 								}
 							</div>
 						</div>

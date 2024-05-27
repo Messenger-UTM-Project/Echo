@@ -39,12 +39,16 @@
 				<link rel="stylesheet" href="/css/dark.css"/>
 			}
 		}
+		else
+		{
+			<link rel="stylesheet" href="/css/dark.css"/>
+		}
 		<link rel="stylesheet" href="/css/base.css"/>
 	</head>
 	<body translate="no">
 		@await Component.InvokeAsync("CultureSwitcher")
 		@RenderBody()
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.11/signalr.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=AM_CHTML"></script>
 		@await RenderSectionAsync("Scripts", required: false)
 	</body>

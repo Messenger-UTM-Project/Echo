@@ -34,7 +34,7 @@
   height: 100vh;
   padding: 2em;
   font-size: 1.5em;
-  background-color: rgba(31, 32, 41, 0.5);
+  background-color: rgba(var(--bg-color-primary-rgb), 0.5);
   backdrop-filter: blur(4px);
   z-index: 10;
 }
@@ -44,7 +44,7 @@
   aspect-ratio: 1;
 }
 .qrcode-container .qrcode path {
-  fill: #c4c3ca;
+  fill: var(--fg-color-primary);
 }
 
 .header {
@@ -58,9 +58,9 @@
 .header .image {
   background-size: cover;
   background-position: center;
-  -moz-box-shadow: rgba(20, 20, 20, 0.9) 0px 7px 29px 0px inset, #141414 0px 7px 29px 0px;
-  -webkit-box-shadow: rgba(20, 20, 20, 0.9) 0px 7px 29px 0px inset, #141414 0px 7px 29px 0px;
-  box-shadow: rgba(20, 20, 20, 0.9) 0px 7px 29px 0px inset, #141414 0px 7px 29px 0px;
+  -moz-box-shadow: rgba(var(--box-shadow-color-primary-rgb), 0.9) 0px 7px 29px 0px inset, rgba(var(--box-shadow-color-primary-rgb), 1) 0px 7px 29px 0px;
+  -webkit-box-shadow: rgba(var(--box-shadow-color-primary-rgb), 0.9) 0px 7px 29px 0px inset, rgba(var(--box-shadow-color-primary-rgb), 1) 0px 7px 29px 0px;
+  box-shadow: rgba(var(--box-shadow-color-primary-rgb), 0.9) 0px 7px 29px 0px inset, rgba(var(--box-shadow-color-primary-rgb), 1) 0px 7px 29px 0px;
 }
 .header .image .overlay {
   display: flex;

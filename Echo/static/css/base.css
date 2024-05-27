@@ -9,14 +9,14 @@ body, html {
   padding: 0;
   height: 100%;
   width: 100%;
-  background-color: #1f2029 !important;
+  background-color: var(--bg-color-primary) !important;
 }
 
 body {
   font-family: "Poppins", "Inter", sans-serif;
   font-weight: 300;
   line-height: 1.7;
-  color: #c4c3ca;
+  color: var(--fg-color-primary);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   font-smoothing: antialiased;
@@ -155,10 +155,10 @@ select {
   font: inherit;
   font-size: 0.85em;
   padding: 0.75em 4em 0.75em 0.75em;
-  background: url(https://upload.wikimedia.org/wikipedia/commons/9/9d/Caret_down_font_awesome_whitevariation.svg) no-repeat right 0.8em center/1.4em, linear-gradient(to left, rgba(196, 195, 202, 0.3) 3em, rgba(196, 195, 202, 0.2) 3em);
-  color: #c4c3ca;
+  background: url(https://upload.wikimedia.org/wikipedia/commons/9/9d/Caret_down_font_awesome_whitevariation.svg) no-repeat right 0.8em center/1.4em, linear-gradient(to left, rgba(var(--fg-color-primary-rgb), 0.3) 3em, rgba(var(--fg-color-primary-rgb), 0.2) 3em);
+  color: var(--fg-color-primary);
   border-radius: 0.25em;
-  box-shadow: 0 0 1em 0 rgba(20, 20, 20, 0.2);
+  box-shadow: 0 0 1em 0 rgba(var(--box-shadow-color-primary-rgb), 0.2);
   cursor: pointer;
 }
 select::-ms-expand {
@@ -169,7 +169,7 @@ select:focus {
 }
 select option {
   color: inherit;
-  background-color: rgba(31, 32, 41, 0.8);
+  background-color: rgba(var(--bg-color-primary-rgb), 0.8);
 }
 
 #culture-switcher {
@@ -210,11 +210,11 @@ select option {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #c4c3ca;
+  background-color: var(--fg-color-primary);
   border-radius: 1em;
   border: 6px solid transparent;
   background-clip: content-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #dfdee2;
+  background-color: var(--fg-color-secondary);
 }
