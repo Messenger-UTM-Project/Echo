@@ -51,7 +51,7 @@ namespace Echo
 			{
 				string defaultCulture = "en";
 
-				var supportedCultures = new[] { defaultCulture, "ru" };
+				var supportedCultures = new[] { defaultCulture, "ru", "ro" };
 				var cultures = supportedCultures.Select(culture => new CultureInfo(culture)).ToList();
 
 				options.DefaultRequestCulture = new RequestCulture(defaultCulture);

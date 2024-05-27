@@ -8,20 +8,20 @@
 
 @model List<User>
 
-@inject IStringLocalizer<IndexController> Localizer
+@inject IStringLocalizer<ProfileController> _
 
 @{
 	Layout = "/Controllers/Shared/_Layout.cshtml";
 	
-	ViewData["Title"] = Localizer["Profile"];
-	ViewData["Description"] = Localizer["Profile"];
+	ViewData["Title"] = _["Profile"];
+	ViewData["Description"] = _["Profile"];
 	ViewData["currentUrl"] = $"{ViewContext.HttpContext.Request.Scheme}://{ViewContext.HttpContext.Request.Host}{ViewContext.HttpContext.Request.Path}{ViewContext.HttpContext.Request.QueryString}";
-
+	
 	var links = new List<NavbarLink>
 	{
-		new NavbarLink { RouteName = "Index", IconClass = "uil-code-branch", Text = "Home" },
-		new NavbarLink { RouteName = "Chats", IconClass = "uil-chat" },
-		new NavbarLink { RouteName = "Logout", IconClass = "uil-signout" }
+		new NavbarLink { RouteName = "Index", IconClass = "uil-code-branch", Text = _["Home"] },
+		new NavbarLink { RouteName = "Chats", IconClass = "uil-chat", Text = _["Chats"] },
+		new NavbarLink { RouteName = "Logout", IconClass = "uil-signout", Text = _["Logout"] }
 	};
 }
 
@@ -38,14 +38,14 @@
 	<div class="container">
 		<div class="profile">
 			<div class="header">
-				<div class="image" style="background-image: url('@Localizer[ViewBag.ProfileImagePath]');">
+				<div class="image" style="background-image: url('@ViewBag.ProfileImagePath');">
 					<div class="overlay editProfilePicture">
 						<i class="uil uil-image-edit"></i>
 					</div>
 				</div>
 				<div class="info">
-					<div class="name">@Localizer[ViewBag.Name]</div>
-					<div class="username">@Localizer[ViewBag.UserName]</div>
+					<div class="name">@ViewBag.Name</div>
+					<div class="username">@ViewBag.UserName</div>
 				</div>
 				<div class="buttons">
 					<i class="uil uil-edit btn"></i>

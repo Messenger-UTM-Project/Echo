@@ -8,25 +8,25 @@
 
 @model List<Chat>
 
-@inject IStringLocalizer<IndexController> _
+@inject IStringLocalizer<ChatController> _
 
 @{
 	Layout = "/Controllers/Shared/_Layout.cshtml";
 	
-	ViewData["Title"] = _["Main"];
-	ViewData["Description"] = _["Main"];
+	ViewData["Title"] = _["Chats"];
+	ViewData["Description"] = _["Chats"];
 	ViewData["currentUrl"] = $"{ViewContext.HttpContext.Request.Scheme}://{ViewContext.HttpContext.Request.Host}{ViewContext.HttpContext.Request.Path}{ViewContext.HttpContext.Request.QueryString}";
 
 	var links = new List<NavbarLink>
 	{
-		new NavbarLink { RouteName = "Index", IconClass = "uil-code-branch", Text = "Home" },
-		new NavbarLink { RouteName = "Profile", IconClass = "uil-chat-bubble-user" },
-		new NavbarLink { RouteName = "Logout", IconClass = "uil-signout" }
+		new NavbarLink { RouteName = "Index", IconClass = "uil-code-branch", Text = _["Home"] },
+		new NavbarLink { RouteName = "Profile", IconClass = "uil-chat-bubble-user", Text = _["Profile"] },
+		new NavbarLink { RouteName = "Logout", IconClass = "uil-signout", Text = _["Logout"] }
 	};
 }
 
 @section Head {
-	<link rel="stylesheet" href="/css/chat.css"/>
+	<link rel="stylesheet" href="/css/chats.css"/>
 }
 
 @section Scripts {
@@ -37,7 +37,7 @@
 @await Component.InvokeAsync("Navbar", new { links = links, viewContext = ViewContext })
 <main>
 	<div class="container">
-		<h1 class="header">Chats</h1>
+		<h1 class="header">@_["Chats"]</h1>
 		<div class="chats"/>
 		@foreach (var chat in Model)
         {

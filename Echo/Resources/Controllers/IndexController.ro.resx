@@ -118,15 +118,42 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Chats" xml:space="preserve">
-    <value>Чаты</value>
+    <value>Chat-uri</value>
+  </data>
+  <data name="Confirm Password" xml:space="preserve">
+    <value>Parola repetată</value>
   </data>
   <data name="Home" xml:space="preserve">
-    <value>Дом</value>
+    <value>Acasă</value>
+  </data>
+  <data name="Log In" xml:space="preserve">
+    <value>Logare</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Выйти</value>
+    <value>Deconectare</value>
+  </data>
+  <data name="Main" xml:space="preserve">
+    <value>Pagina principala</value>
   </data>
   <data name="Profile" xml:space="preserve">
-    <value>Профиль</value>
+    <value>Profil</value>
+  </data>
+  <data name="Sign Up" xml:space="preserve">
+    <value>Înregistrare</value>
+  </data>
+  <data name="SUBMIT" xml:space="preserve">
+    <value>Trimite</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Utilizatori</value>
+  </data>
+  <data name="Your Full Name" xml:space="preserve">
+    <value>Nume complet</value>
+  </data>
+  <data name="Your Password" xml:space="preserve">
+    <value>Parola</value>
+  </data>
+  <data name="Your Username" xml:space="preserve">
+    <value>Nume Utilizator</value>
   </data>
 </root>
