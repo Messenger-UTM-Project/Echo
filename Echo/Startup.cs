@@ -1,3 +1,4 @@
+using System.Text;
 using System.Globalization;
 
 using Microsoft.AspNetCore.Identity;
@@ -9,6 +10,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 using ParkSquare.AspNetCore.Sitemap;
 
@@ -70,6 +73,9 @@ namespace Echo
                 o.AreaViewLocationFormats.Add("/Areas/Shared/Views/{0}" + RazorViewEngine.ViewExtension);
             });
 
+			var jwtSettings = Configuration.GetSection("Jwt");
+			var key = Encoding.ASCII.GetBytes(jwtSettings["SecretKey"]);
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -82,6 +88,18 @@ namespace Echo
 				options.AccessDeniedPath = "/403";
 				options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
 				options.SlidingExpiration = true;
+			}).AddJwtBearer(options =>
+			{
+				options.TokenValidationParameters = new TokenValidationParameters
+				{
+					ValidateIssuer = true,
+					ValidateAudience = true,
+					ValidateLifetime = true,
+					ValidateIssuerSigningKey = true,
+					ValidIssuer = jwtSettings["Issuer"],
+					ValidAudience = jwtSettings["Audience"],
+					IssuerSigningKey = new SymmetricSecurityKey(key)
+				};
 			});
 
 			services.AddAuthorization(options =>
@@ -110,7 +128,9 @@ namespace Echo
 				.AddDefaultTokenProviders();
 
 			services.AddDbContext<AppDbContext>(options =>
-				options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+				options
+					.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"),
+						o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
 			services.AddHttpsRedirection(options =>
 			{
@@ -118,11 +138,15 @@ namespace Echo
 			});
 
 			services.AddSingleton<IStringLocalizerFactory, ResourceManagerStringLocalizerFactory>();
+			services.AddSingleton<IUserConnectionManager, UserConnectionManager>();
 
 			services.AddMvc()
 				.AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
 				.AddDataAnnotationsLocalization()
-				.AddRazorRuntimeCompilation();
+				.AddRazorRuntimeCompilation()
+				.AddNewtonsoftJson(options =>
+					options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+				);
 
 			services.AddAntiforgery(options => 
 			{
@@ -143,12 +167,15 @@ namespace Echo
             });
 
 			services.AddScoped<UserRepository>();
+			services.AddScoped<ChatRepository>();
 
 			services.AddScoped<RoleManager<UserRole>>();
 			services.AddScoped<AppRoleManager>();
 
 			services.AddScoped<UserService>();
-			services.AddScoped<IUserServiceResult<List<User>>, UserServiceResult<List<User>>>();
+			services.AddScoped<ChatService>();
+			services.AddScoped<FriendshipService>();
+			services.AddScoped<IServiceResult<List<User>>, ServiceResult<List<User>>>();
 			services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 			services.AddScoped<SignInManager<User>, SignInManager<User>>();
 		}

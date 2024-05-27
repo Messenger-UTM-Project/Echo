@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 
+using Echo.Data;
 using Echo.Enum;
 using Echo.Roles;
 using Echo.Models;
@@ -11,28 +12,29 @@ namespace Echo.Services
 {
     public class UserService : IAuthService
 	{
+		private readonly AppDbContext _context;
 		private readonly UserRepository _userRepository;
 		private readonly UserManager<User> _userManager;	
 		private readonly AppRoleManager _roleManager;
 		private readonly SignInManager<User> _signInManager;
 
-		public UserService(UserRepository userRepository, UserManager<User> userManager, AppRoleManager roleManager, SignInManager<User> signInManager)
+		public UserService(AppDbContext context, UserRepository userRepository, UserManager<User> userManager, AppRoleManager roleManager, SignInManager<User> signInManager)
 		{
+			_context = context;
 			_userRepository = userRepository;
 			_userManager = userManager;
 			_roleManager = roleManager;
 			_signInManager = signInManager;
 		}
 
-		public async Task<UserServiceResult<List<User>>> GetUsers()
+		public async Task<ServiceResult<List<User>>> GetUsersAsync()
 		{
 			var users = await _userRepository.GetUsersAsync();
-			var result = new UserServiceResult<List<User>>();
-
-			if (users.Count == 0)
-				result.StatusCode = HttpStatusCode.NotFound;
-			else
-				result.Result = users;
+			var result = new ServiceResult<List<User>>
+			{
+				Result = users,
+				StatusCode = users.Count == 0 ? HttpStatusCode.NotFound : HttpStatusCode.OK
+			};
 
 			return result;
 		}
@@ -47,27 +49,128 @@ namespace Echo.Services
 
 			if (result.Succeeded)
 			{
-				await _roleManager.AssignRoleToUser(user, "User");
+				await _roleManager.AssignRoleToUserAsync(user, "User");
 				var signInResult = await AuthenticateAsync(username, password);
 			}
 
 			return result;
 		}
 
-		public async Task<SignInResult> AuthenticateAsync(string username, string password)
+		public async Task<ServiceResult<SignInResult>> AuthenticateAsync(string username, string password)
 		{
-			var result = await _signInManager.PasswordSignInAsync(username, password, false, lockoutOnFailure: false);
+			var signInResult = await _signInManager.PasswordSignInAsync(username, password, false, lockoutOnFailure: false);
+			var result = new ServiceResult<SignInResult>
+			{
+				Result = signInResult,
+				StatusCode = signInResult == null ? HttpStatusCode.Unauthorized : HttpStatusCode.OK
+			};
+
 			return result;
 		}
 
-		public async Task LogoutAsync()
+		public async Task<bool> LogoutAsync()
 		{
-			await _signInManager.SignOutAsync();
+			try
+			{
+				await _signInManager.SignOutAsync();
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
 		}
 
 		public bool IsAuthenticated(ClaimsPrincipal user)
 		{
 			return _signInManager.IsSignedIn(user);
+		}
+
+		public async Task<ServiceResult<User>> GetUserAsync(ClaimsPrincipal userPrincipal)
+		{
+			try
+			{
+				var user = await _userManager.GetUserAsync(userPrincipal);
+				return CreateUserResult(user);
+			}
+			catch (Exception)
+			{
+				throw;
+			}
+		}
+
+		public async Task<ServiceResult<User>> GetUserAsync(Guid id)
+		{
+			try
+			{
+				var user = await _userRepository.FindByIdAsync(id);
+				return CreateUserResult(user);
+			}
+			catch (Exception)
+			{
+				throw;
+			}
+		}
+
+		public async Task<ServiceResult<User>> GetUserAsync(string username)
+		{
+			try
+			{
+				var user = await _userRepository.FindByUsernameAsync(username);
+				return CreateUserResult(user);
+			}
+			catch (Exception)
+			{
+				throw;
+			}
+		}
+
+		private ServiceResult<User> CreateUserResult(User user)
+		{
+			var result = new ServiceResult<User>
+			{
+				Result = user,
+				StatusCode = user == null ? HttpStatusCode.NotFound : HttpStatusCode.OK
+			};
+
+			return result;
+		}
+
+		public async Task<ServiceResult<List<User>>> GetAllFriendsAsync(ClaimsPrincipal userPrincipal)
+		{
+			var user = await _userManager.GetUserAsync(userPrincipal);
+			var friends = await _userRepository.GetAllFriendsAsync(user.Id);
+			var result = new ServiceResult<List<User>>
+			{
+				Result = friends,
+				StatusCode = friends == null ? HttpStatusCode.NotFound : HttpStatusCode.OK
+			};
+
+			return result;
+		}
+
+		public async Task<ServiceResult<List<User>>> GetAllFriendsAsync(Guid userId)
+		{
+			var friends = await _userRepository.GetAllFriendsAsync(userId);
+			var result = new ServiceResult<List<User>>
+			{
+				Result = friends,
+				StatusCode = friends == null ? HttpStatusCode.NotFound : HttpStatusCode.OK
+			};
+
+			return result;
+		}
+
+		public async Task<ServiceResult<IdentityResult>> UpdateUserAsync(User user)
+		{
+			var updateResult = await _userManager.UpdateAsync(user);
+			var result = new ServiceResult<IdentityResult>
+			{
+				Result = updateResult,
+				StatusCode = updateResult.Succeeded ? HttpStatusCode.OK : HttpStatusCode.NotFound
+			};
+
+			return result;
 		}
 	}
 }
