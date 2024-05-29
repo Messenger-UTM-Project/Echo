@@ -34,6 +34,7 @@ namespace Echo.Controllers
         {
 			var userResult = await _userService.GetUserAsync(User);
 			var user = userResult.Result;
+			ViewBag.Id = user.Id;
 			ViewBag.Name = user.Name;
 			ViewBag.UserName = user.UserName;
 			ViewBag.ProfileImagePath = user.ProfileImagePath;

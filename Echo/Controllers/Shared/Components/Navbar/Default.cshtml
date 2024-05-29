@@ -3,7 +3,7 @@
 
 @using Echo.Resources
 
-@inject IStringLocalizer<SharedResources> Localizer
+@inject IStringLocalizer<SharedResources> _
 
 <nav class="navbar">
     <ul class="navbar-nav">
@@ -18,7 +18,7 @@
                 }
                 <a href="@link.RouteName" class="nav-link">
                     <i class="nav-icon uil @link.IconClass"></i>
-                    <span class="link-text">@Localizer[link.Text]</span>
+                    <span class="link-text">@_[link.Text]</span>
                 </a>
             </li>
         }

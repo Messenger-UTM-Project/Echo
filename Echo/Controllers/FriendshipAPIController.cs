@@ -32,6 +32,8 @@ namespace Echo.Controllers
 		{
 			try
 			{
+				if (dto.UserId == dto.FriendId)
+					return BadRequest("Set different UUIDs.");
 				var userResult = await _userService.GetUserAsync(User);
 				var isAdmin = await _roleManager.UserIsInRole(userResult.Result.Id, "Admin");
 				if (userResult.Result.Id != dto.UserId && !isAdmin)
@@ -52,6 +54,8 @@ namespace Echo.Controllers
 		{
 			try
 			{
+				if (dto.UserId == dto.FriendId)
+					return BadRequest("Set different UUIDs.");
 				var userResult = await _userService.GetUserAsync(User);
 				var isAdmin = await _roleManager.UserIsInRole(userResult.Result.Id, "Admin");
 				if (userResult.Result.Id != dto.FriendId && !isAdmin)
@@ -72,6 +76,8 @@ namespace Echo.Controllers
 		{
 			try
 			{
+				if (dto.UserId == dto.FriendId)
+					return BadRequest("Set different UUIDs.");
 				var userResult = await _userService.GetUserAsync(User);
 				var isAdmin = await _roleManager.UserIsInRole(userResult.Result.Id, "Admin");
 				if (userResult.Result.Id != dto.FriendId && !isAdmin)

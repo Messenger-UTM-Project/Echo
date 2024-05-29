@@ -39,17 +39,24 @@
 <main>
 	<div class="container">
 		<h1 class="header">@_["Users"]</h1>
-		<div class="users"/>
-		@foreach (var user in Model)
-        {
-			<a class="user" href="">
+		@if (Model.Count == 0)
+		{
+		<div class="placeholder">@_["No users yet"]</div>
+		}
+		else
+		{
+		<div class="users">
+			@foreach (var user in Model)
+			{
+			<a class="user" href="@Url.RouteUrl("UUIDProfile", new { guid = user.Id })">
 				<i class="input-icon uil uil-user user-icon"></i>
 				<div id="@user.Id" class="info">
 					<div class="name">@user.Name</div>
 					<div class="username">@user.UserName</div>
 				</div>
 			</a>
-        }
+			}
 		</div>
+		}
 	</div>
 </main>

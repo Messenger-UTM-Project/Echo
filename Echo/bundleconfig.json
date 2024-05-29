@@ -109,6 +109,7 @@
 	{
 		"outputFileName": "wwwroot/js/chat.js",
 		"inputFiles": [
+			"static/js/user_handler.js",
 			"static/js/chat_handler.js"
 		],
 		"minify": {
@@ -120,6 +121,7 @@
 	{
 		"outputFileName": "wwwroot/js/friendship.js",
 		"inputFiles": [
+			"static/js/user_handler.js",
 			"static/js/friendship_handler.js"
 		],
 		"minify": {
@@ -131,6 +133,7 @@
 	{
 		"outputFileName": "wwwroot/js/api.js",
 		"inputFiles": [
+			"static/js/user_handler.js",
 			"static/js/chat_handler.js",
 			"static/js/friendship_handler.js"
 		],

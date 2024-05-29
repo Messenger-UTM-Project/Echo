@@ -39,6 +39,18 @@ namespace Echo.Services
 			return result;
 		}
 
+		public async Task<ServiceResult<List<User>>> GetUsersAsync(Guid id)
+		{
+			var users = await _userRepository.GetUsersAsync(id);
+			var result = new ServiceResult<List<User>>
+			{
+				Result = users,
+				StatusCode = users.Count == 0 ? HttpStatusCode.NotFound : HttpStatusCode.OK
+			};
+
+			return result;
+		}
+
 		public async Task<IdentityResult> CreateUserAsync(string name, string username, string password)
 		{
 			var user = new User {

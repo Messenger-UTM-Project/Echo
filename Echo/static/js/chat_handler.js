@@ -1,32 +1,33 @@
 export class Chat {
+	static apiBaseUrl = `${window.location.origin}/api/chats`;
 	static #connection = new signalR.HubConnectionBuilder()
 			.withUrl("/chatHub")
 			.configureLogging(signalR.LogLevel.Information)
 			.build();
 
 	static {
-		Chat.#connection.start()
+		this.#connection.start()
 			.then(() => {
 				console.log("Connection established.");
 			})
 			.catch(err => console.error(err));
 
-		Chat.#connection.onclose(async () => {
-			await Chat.#connection.start();
+		this.#connection.onclose(async () => {
+			await this.#connection.start();
 		});
 		
-		Chat.#connection.on("ReceiveMessage", (messageId, userId, chatId, message) => {
+		this.#connection.on("ReceiveMessage", (messageId, userId, chatId, message) => {
 			console.log(`<${messageId}> [${chatId}] ${userId}: ${message}`);
 		});
 	}
 
 	static async sendMessage(userId, chatId, message) {
-		Chat.#connection.invoke("SendMessage", userId, chatId, message)
+		this.#connection.invoke("SendMessage", userId, chatId, message)
 			.catch(err => console.error(err));
 	}
 
 	static async createChat(chatName, ownerUserIds, memberUserIds) {
-		const url = `${window.location.origin}/api/chats/create`;
+		const url = `${this.apiBaseUrl}/create`;
 
 		const requestData = {
 			ChatName: chatName,
@@ -35,7 +36,13 @@ export class Chat {
 		};
 
 		try {
-			const response = await fetch(url, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(requestData)});
+			const response = await fetch(url, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(requestData)
+			});
 
 			if (!response.ok) {
 				const errorDetails = await response.json();

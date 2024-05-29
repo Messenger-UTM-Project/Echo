@@ -1,14 +1,7 @@
-
-using System;
-using System.IO;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Localization;
 
 using Echo.Data;
-using Echo.Models;
 using Echo.Services;
 
 namespace Echo.Controllers

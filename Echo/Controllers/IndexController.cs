@@ -28,9 +28,9 @@ namespace Echo.Controllers
         [Route("", Name = "Index")]
         public async Task<IActionResult> Index()
         {
-			ViewBag.Name = User.Identity.Name;
-			var users = await _userService.GetUsersAsync();
-			return View(users.Result);
+			var userResult = await _userService.GetUserAsync(User);
+			var usersResult = await _userService.GetUsersAsync(userResult.Result.Id);
+			return View(usersResult.Result);
         }
 
         [AllowAnonymous]
