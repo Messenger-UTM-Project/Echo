@@ -29,5 +29,13 @@ namespace Echo.Controllers
 			var chats = await _chatService.GetOrderedChatsAsync(User);
 			return View(chats.Result);
 		}
+
+        [HttpGet]
+        [Route("{guid:guid}", Name = "Chat")]
+        public async Task<IActionResult> Chat(Guid guid)
+        {
+			var chats = await _chatService.GetOrderedChatsAsync(User);
+			return View(chats.Result);
+		}
 	}
 }

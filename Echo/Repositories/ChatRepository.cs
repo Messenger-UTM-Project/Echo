@@ -18,5 +18,14 @@ namespace Echo.Repositories
 		{
 			return await _dbContext.Chats.FindAsync(chatId);
 		}
+
+		public async Task<Chat> GetChatWithMessagesAsync(Guid chatId)
+		{
+			var chat = await _dbContext.Chats
+				.Include(c => c.Messages)
+				.FirstOrDefaultAsync(c => c.Id == chatId);
+
+			return chat;
+		}
 	}
 }
