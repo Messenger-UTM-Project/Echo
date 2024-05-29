@@ -34,7 +34,7 @@ namespace Echo.Controllers
         [Route("{guid:guid}", Name = "Chat")]
         public async Task<IActionResult> Chat(Guid guid)
         {
-			var chats = await _chatService.GetOrderedChatsAsync(User);
+			var chats = await _chatService.GetChatByIdAsync(guid, true);
 			return View(chats.Result);
 		}
 	}

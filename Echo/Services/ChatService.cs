@@ -82,16 +82,14 @@ namespace Echo.Services
 			return result;
 		}
 
-		public async Task<ServiceResult<Chat>> GetChatByIdAsync(Guid chatId)
+		public async Task<ServiceResult<Chat>> GetChatByIdAsync(Guid chatId, bool messages = false)
 		{
-			var chat = await _chatRepository.FindByIdAsync(chatId);
-			var result = new ServiceResult<Chat>(options => 
+			var chat = messages ? await _chatRepository.GetChatWithMessagesAsync(chatId) : await _chatRepository.FindByIdAsync(chatId);
+			var result = new ServiceResult<Chat>
 			{
-				options.Result = chat;
-			});
-			
-			if (chat == null)
-				result.StatusCode = HttpStatusCode.NotFound;
+				Result = chat,
+				StatusCode = chat == null ? HttpStatusCode.NotFound : HttpStatusCode.OK
+			};
 
 			return result;
 		}

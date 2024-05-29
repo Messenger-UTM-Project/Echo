@@ -22,7 +22,7 @@ namespace Echo.Repositories
 		public async Task<Chat> GetChatWithMessagesAsync(Guid chatId)
 		{
 			var chat = await _dbContext.Chats
-				.Include(c => c.Messages)
+				.Include(c => c.Messages.OrderByDescending(m => m.CreatedAt))
 				.FirstOrDefaultAsync(c => c.Id == chatId);
 
 			return chat;
