@@ -120,19 +120,10 @@
   <data name="Chats" xml:space="preserve">
     <value>Чаты</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>Дом</value>
-  </data>
-  <data name="Logout" xml:space="preserve">
-    <value>Выйти</value>
-  </data>
   <data name="N/A" xml:space="preserve">
     <value>Н/Д</value>
   </data>
   <data name="No messages yet" xml:space="preserve">
     <value>Нет Сообщений</value>
-  </data>
-  <data name="Profile" xml:space="preserve">
-    <value>Профиль</value>
   </data>
 </root>

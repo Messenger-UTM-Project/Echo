@@ -1,4 +1,4 @@
-namespace Echo.Resources
+namespace Echo
 {
     public class SharedResources
     {

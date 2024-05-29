@@ -117,31 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Confirm Password" xml:space="preserve">
-    <value>Потверждение пароля</value>
+  <data name="404" xml:space="preserve">
+    <value>Ошибка 404</value>
   </data>
-  <data name="Log In" xml:space="preserve">
-    <value>Вход</value>
+  <data name="404 Error" xml:space="preserve">
+    <value>Ошибка 404</value>
   </data>
-  <data name="Main" xml:space="preserve">
-    <value>Главная Страница</value>
+  <data name="404 Text" xml:space="preserve">
+    <value>Страница не найдена</value>
   </data>
-  <data name="Sign Up" xml:space="preserve">
-    <value>Регистрация</value>
+  <data name="Chats" xml:space="preserve">
+    <value>Чаты</value>
   </data>
-  <data name="SUBMIT" xml:space="preserve">
-    <value>Отправить</value>
+  <data name="Home" xml:space="preserve">
+    <value>Дом</value>
   </data>
-  <data name="Users" xml:space="preserve">
-    <value>Пользователи</value>
+  <data name="Logout" xml:space="preserve">
+    <value>Выйти</value>
   </data>
-  <data name="Your Full Name" xml:space="preserve">
-    <value>Полное имя</value>
-  </data>
-  <data name="Your Password" xml:space="preserve">
-    <value>Пароль</value>
-  </data>
-  <data name="Your Username" xml:space="preserve">
-    <value>Имя пользователя</value>
+  <data name="Profile" xml:space="preserve">
+    <value>Профиль</value>
   </data>
 </root>
