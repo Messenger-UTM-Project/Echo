@@ -13,8 +13,8 @@
 @{
 	Layout = "/Controllers/Shared/_Layout.cshtml";
 	
-	ViewData["Title"] = _["Main"];
-	ViewData["Description"] = _["Main"];
+	ViewData["Title"] = Model.Name;
+	ViewData["Description"] = Model.Name;
 	ViewData["currentUrl"] = $"{ViewContext.HttpContext.Request.Scheme}://{ViewContext.HttpContext.Request.Host}{ViewContext.HttpContext.Request.Path}{ViewContext.HttpContext.Request.QueryString}";
 
 	var links = new List<NavbarLink>
@@ -24,6 +24,11 @@
 		new NavbarLink { RouteName = "Chats", IconClass = "uil-chat" },
 		new NavbarLink { RouteName = "Logout", IconClass = "uil-signout" }
 	};
+
+	var messagesList = Model.Messages.ToList();
+	var previousMessageDate = DateTime.MinValue;
+
+	var timeZone = ViewBag.TimeZone as TimeZoneInfo;
 }
 
 @section Head {
@@ -31,21 +36,83 @@
 }
 
 @section Scripts {
-	<script type="module" src="/js/chat.js"></script>
-}
+	<script type="module" defer>
+		import { Chat } from '/js/chat.js'
 
+		let messagesElement = document.querySelector(".messages");
+		messagesElement.scrollTop = messagesElement.scrollHeight;
+
+		Chat.connection.on("ReceiveMessage", (messageId, userId, chatId, message, createdAt, updatedAt, profileImagePath) => {
+			let messageElement = createMessageElement(messageId, userId, message, createdAt, updatedAt, profileImagePath);
+			document.querySelector(".messages").appendChild(messageElement);
+		});
+
+		document.querySelectorAll(".message-input").forEach(item => {
+			item.addEventListener('keydown', e => {
+				if (e.key === 'Enter') {
+					Chat.sendMessage("@Model.Id", e.currentTarget.value);
+					e.currentTarget.value = null;
+				}
+			});
+        });
+
+		document.querySelectorAll(".type input-icon").forEach(item => {
+			item.addEventListener('click', e => {
+				let input = document.querySelector(".message-input");
+				Chat.sendMessage("@Model.Id", input.value);
+				input.value = null;
+			});
+        });
+
+		function createMessageElement(id, userId, content, createdAt, updatedAt, profileImagePath) {
+			const messageElement = document.createElement('div');
+			messageElement.classList.add('message', 'message-right');
+			messageElement.setAttribute('id', `${id}`);
+
+			const contentElement = document.createElement('div');
+			contentElement.classList.add('content');
+			contentElement.setAttribute('title', `Last edited at: ${new Date(updatedAt).toLocaleTimeString()}`);
+
+			const textElement = document.createElement('div');
+			textElement.classList.add('text');
+			textElement.textContent = content;
+
+			const dateElement = document.createElement('div');
+			dateElement.classList.add('date');
+			dateElement.textContent = new Date(createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+			contentElement.appendChild(textElement);
+			contentElement.appendChild(dateElement);
+
+			var anchorElement = document.createElement('a');
+
+			var url = '@Url.RouteUrl("UUIDProfile", new { guid = "ViewBag.User.Id" })'.replace("@ViewBag.User.Id" userId);
+			anchorElement.setAttribute('href', url);
+
+			const profileImageElement = document.createElement('div');
+			profileImageElement.classList.add('profile-image');
+			profileImageElement.style.backgroundImage = `url('${profileImagePath}')`;
+
+			anchorElement.appendChild(profileImageElement);
+
+			messageElement.appendChild(contentElement);
+			messageElement.appendChild(anchorElement);
+
+			return messageElement;
+		}
+	</script>
+}
 
 @await Component.InvokeAsync("Navbar", new { links = links, viewContext = ViewContext })
 <main>
 	<div class="container">
 		<div class="header">
-			<img class="profile-image"/>
 			<div class="info">
-				<div class="name"></div>
-				<div class="username"></div>
+				<div class="name">@Model.Name</div>
+				<div class="members">@Model.Owners.Count owners, @Model.Members.Count members</div>
 			</div>
 		</div>
-		@if (Model.Count == 0)
+		@if (Model.Messages.Count == 0)
 		{
 		<div class="placeholder">
 			<div class="text">@_["No messages yet"]</div>
@@ -53,11 +120,46 @@
 		}
 		else
 		{
-		<div class="messages">
-			@foreach (var message in Model)
+		<div id="@Model.Id" class="messages">
+			@for (var i = 0; i < Model.Messages.Count; i++)
 			{
+				var message = messagesList[i];
+				var nextMessage = i < Model.Messages.Count - 1 ? messagesList[i + 1] : null;
+				if (previousMessageDate.Date != message.CreatedAt.Date)
+				{
+			<div class="date-mark">@TimeZoneInfo.ConvertTimeFromUtc(message.CreatedAt, timeZone).ToString("M")</div>
+				}
+				previousMessageDate = message.CreatedAt;
+				if (message.UserId == ViewBag.User.Id)
+				{
+			<div id="@message.Id" class="message message-right">
+				<div class="content" title="Last edited at: @TimeZoneInfo.ConvertTimeFromUtc(message.UpdatedAt, timeZone).ToString("T")">
+					<div class="text">@message.Content</div>
+					<div class="date">@TimeZoneInfo.ConvertTimeFromUtc(message.CreatedAt, timeZone).ToString("t")</div>
+				</div>
+				<a href="@Url.RouteUrl("UUIDProfile", new { guid = message.User.Id })">
+					<div class="profile-image" style="background-image: url('@(nextMessage == null || nextMessage.User.Id != message.User.Id ? message.User.ProfileImagePath : "" )')"></div>
+				</a>
+			</div>
+				}
+				else
+				{
+			<div id="@message.Id" class="message message-left">
+				<a href="@Url.RouteUrl("UUIDProfile", new { guid = message.User.Id })">
+					<div class="profile-image" style="background-image: url('@(nextMessage == null || nextMessage.User.Id != message.User.Id ? message.User.ProfileImagePath : "" )')"></div>
+				</a>
+				<div class="content" title="Last edited at: @TimeZoneInfo.ConvertTimeFromUtc(message.UpdatedAt, timeZone).ToString("T")">
+					<div class="text">@message.Content</div>
+					<div class="date">@TimeZoneInfo.ConvertTimeFromUtc(message.CreatedAt, timeZone).ToString("t")</div>
+				</div>
+			</div>
+				}
 			}
 		</div>
 		}
+		<div class="type form-group">
+			<input type="text" class="message-input form-style" placeholder="Type message here"/>
+			<i class="uil uil-telegram input-icon"></i>
+		</div>
 	</div>
 </main>

@@ -1,0 +1,15 @@
+@model Echo.Models.CultureSwitcher
+ 
+<div>
+    <form id="culture-switcher">
+        <select name="culture" id="culture-options" onchange="this.form.submit()">
+            @if (Model.SupportedCultures != null)
+            {
+                foreach (var culture in Model.SupportedCultures)
+                {
+                    <option value="@culture.Name" selected="@(Model.CurrentUICulture != null && Model.CurrentUICulture.Name == culture.Name)">@culture.DisplayName</option>
+                }
+            }
+        </select>
+    </form>
+</div>

@@ -1,28 +1,28 @@
 export class Chat {
 	static apiBaseUrl = `${window.location.origin}/api/chats`;
-	static #connection = new signalR.HubConnectionBuilder()
+	static connection = new signalR.HubConnectionBuilder()
 			.withUrl("/chatHub")
 			.configureLogging(signalR.LogLevel.Information)
 			.build();
 
 	static {
-		this.#connection.start()
+		this.connection.start()
 			.then(() => {
 				console.log("Connection established.");
 			})
 			.catch(err => console.error(err));
 
-		this.#connection.onclose(async () => {
-			await this.#connection.start();
+		this.connection.onclose(async () => {
+			await this.connection.start();
 		});
 		
-		this.#connection.on("ReceiveMessage", (messageId, userId, chatId, message) => {
+		this.connection.on("ReceiveMessage", (messageId, userId, chatId, message, createdAt, updatedAt, profileImagePath) => {
 			console.log(`<${messageId}> [${chatId}] ${userId}: ${message}`);
 		});
 	}
 
-	static async sendMessage(userId, chatId, message) {
-		this.#connection.invoke("SendMessage", userId, chatId, message)
+	static async sendMessage(chatId, message) {
+		this.connection.invoke("SendMessage", chatId, message)
 			.catch(err => console.error(err));
 	}
 

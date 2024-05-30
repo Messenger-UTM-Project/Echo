@@ -4,24 +4,26 @@ export class Keylogger {
 	static showKeys = false;
 
 	static {
+		window.addEventListener("mouseleave", e => this.wipe());
+
 		window.addEventListener("keydown", e => {
-			if (Keylogger.showKeys) {
+			if (this.showKeys) {
 				console.log(e);
 			}
-			Keylogger.append(e.keyCode);
+			this.append(e.keyCode);
 		});
 
 		window.addEventListener("keyup", e => {
-			var keys = Keylogger.getKeys();
-			var list = Keylogger.getList();
+			var keys = this.getKeys();
+			var list = this.getList();
 			var i = 0;
 
-			if (Keylogger.showKeys) {
+			if (this.showKeys) {
 				console.log(e);
 			}
 			while (i < keys.length) {
 				if (e.keyCode == keys[i]) {
-					keys = Keylogger.remove(i).getKeys();
+					keys = this.remove(i).getKeys();
 				}
 				else {
 					i++;
@@ -40,24 +42,24 @@ export class Keylogger {
 			"keyCode" : keyCode,
 			"func" : func
 		}
-		Keylogger.#list.push(info);
-		return Keylogger;
+		this.#list.push(info);
+		return this;
 	}
 
 	static unpress = (keyCode, func) => {
 		var i = 0;
-		while (i < Keylogger.#list.length) {
+		while (i < this.#list.length) {
 			if (typeof func != "function") {
-				if (Keylogger.#list[i].keyCode == keyCode) {
-					var removed = Keylogger.#list.splice(i, 1)[0]
+				if (this.#list[i].keyCode == keyCode) {
+					var removed = this.#list.splice(i, 1)[0]
 				}
 				else {
 					i++;
 				}
 			}
 			else {
-				if (Keylogger.#list[i].keyCode == keyCode && Keylogger.#list[i].func == func) {
-					var removed = Keylogger.#list.splice(i, 1)[0]
+				if (this.#list[i].keyCode == keyCode && this.#list[i].func == func) {
+					var removed = this.#list.splice(i, 1)[0]
 				}
 				else {
 					i++;
@@ -68,26 +70,26 @@ export class Keylogger {
 	}
 
 	static getKeys = () => {
-		return Keylogger.#keys;
+		return this.#keys;
 	}
 
 	static getList = () => {
-		return Keylogger.#list;
+		return this.#list;
 	}
 
 	static append = (keyCode) => {
-		Keylogger.#keys.push(keyCode);
+		this.#keys.push(keyCode);
 		
 		return this;
 	}
 
 	static wipe = () => {
-		Keylogger.#keys = [];
+		this.#keys = [];
 		return this;
 	}
 
 	static remove = (i) => {
-		Keylogger.#keys.splice(i, 1);
+		this.#keys.splice(i, 1);
 		return this;
 	}
 }

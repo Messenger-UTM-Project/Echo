@@ -1,0 +1,69 @@
+@import 'media'
+@import 'prefixes'
+@import 'variables'
+
+@keyframes outer-animate
+  0%
+    fill: $bg-color-primary
+    stroke: $bg-color-primary
+  25%
+    fill: $bg-color-primary
+    stroke: $bg-color-primary
+  75%
+    fill: $fg-color-primary
+    stroke: $fg-color-primary
+  100%
+    fill: $bg-color-primary
+    stroke: $bg-color-primary
+
+@keyframes make-visible
+  0%
+    opacity : 1
+    visibility: visible
+
+  90%
+    opacity : 1
+
+  100%
+    opacity : 0
+    visibility: hidden
+
+.intro
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
+  position: fixed
+  width: 100%
+  height: 100%
+  visibility: visible
+  opacity: 1
+  animation-name: make-visible
+  animation-duration : 5.7s
+  background-color: $bg-color-primary
+  z-index: 8
+
+  & .intro-title
+    height: 20vh
+    width: 75vw
+
+    & .intro-letter
+      stroke: $bg-color-primary
+      stroke-width: 2.1px
+      stroke-linecap: round
+      stroke-linejoin: round
+      fill: none
+      animation-name: outer-animate
+      animation-duration: 2.6s
+
+#intro0
+  animation-delay : 1s
+
+#intro1
+  animation-delay : 1.1s
+
+#intro2
+  animation-delay : 1.2s
+
+#intro3
+  animation-delay : 1.3s

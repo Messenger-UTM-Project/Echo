@@ -70,7 +70,7 @@
   position: relative
   border-radius: 0.3em
   background-color: $bg-color-primary
-  @include prefix(box-shadow, rgba($box-shadow-color-primary-rgb, 0.3) 0px 7px 29px 0px, webkit)
+  @include prefix(box-shadow, rgba($box-shadow-color-primary-rgb, 0.3) 0px 7px 12px 0px, webkit)
   @include prefix(transition, box-shadow $transition-speed linear, webkit)
 
 .form-style 
@@ -98,7 +98,7 @@
   @include default-placeholder(ms, moz, webkit)
 
   &:focus-within 
-    box-shadow: rgba($box-shadow-color-primary-rgb, 0.5) 0px 7px 29px 0px
+    box-shadow: rgba($box-shadow-color-primary-rgb, 0.5) 0px 7px 12px 0px
 
 .disabled
   pointer-events: none

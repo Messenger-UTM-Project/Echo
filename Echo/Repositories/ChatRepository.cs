@@ -19,10 +19,12 @@ namespace Echo.Repositories
 			return await _dbContext.Chats.FindAsync(chatId);
 		}
 
-		public async Task<Chat> GetChatWithMessagesAsync(Guid chatId)
+		public async Task<Chat> GetFullChatAsync(Guid chatId)
 		{
 			var chat = await _dbContext.Chats
-				.Include(c => c.Messages.OrderByDescending(m => m.CreatedAt))
+				.Include(c => c.Members)
+				.Include(c => c.Owners)
+				.Include(c => c.Messages.OrderBy(m => m.CreatedAt))
 				.FirstOrDefaultAsync(c => c.Id == chatId);
 
 			return chat;

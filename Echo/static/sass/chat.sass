@@ -1,0 +1,96 @@
+@import 'media'
+@import 'prefixes'
+@import 'variables'
+
+.container
+  padding-top: 1em !important
+  gap: 0 !important
+
+.header
+  display: flex
+  gap: 1em
+  background-color: var(--bg-color-secondary)
+  background-image: url(../../images/pat.svg)
+  background-position: bottom center
+  background-repeat: no-repeat
+  background-size: cover
+  border-radius: 1em
+  padding: 1em
+  margin-bottom: 2em
+  box-shadow: rgba($box-shadow-color-primary-rgb, 0.4) 0px 7px 12px 0px
+
+  & .name
+    font-size: 1.3em
+    font-weight: bold
+
+  & .members
+    font-size: 0.9em
+    font-weight: 500
+    color: $btn-bg-color-primary
+
+.messages
+  display: flex
+  flex-direction: column
+  gap: .75em
+  overflow-y: scroll
+  height: calc(100vh - 17.5em)
+  max-height: 100vh
+  margin-bottom: 0.75em
+
+  & .date-mark
+    color: $fg-color-secondary
+    align-self: center
+
+  & .message-right
+    align-self: flex-end
+
+  & .message-left
+    align-self: flex-start
+
+  & .message 
+    display: flex
+    align-items: flex-end
+    width: fit-content
+    max-width: 30%
+    gap: 1em
+
+    & .content 
+      background-color: $bg-color-secondary
+      background-image: url(../../images/pat.svg)
+      background-position: bottom center
+      background-repeat: no-repeat
+      background-size: cover
+      border-radius: .75em
+      padding: .5em 1.25em
+      hyphens: auto
+      min-width: 7em
+      word-break: break-all
+      overflow-wrap: break-word
+      width: fit-content
+
+    & .date
+      float: right
+      font-style: italic
+      font-size: 0.7em
+      font-weight: 500
+      color: $btn-bg-color-primary
+
+    & .profile-image
+      width: 3em
+      height: 3em
+      min-width: 3em
+      min-height: 3em
+      border-radius: 50%
+      background-size: cover
+      background-position: center
+      margin-bottom: .25em
+
+.type
+  background-color: $bg-color-secondary
+  background-image: url(../../images/pat.svg)
+  background-position: bottom center
+  background-repeat: no-repeat
+  background-size: cover
+
+  & .message-input
+    width: 100%

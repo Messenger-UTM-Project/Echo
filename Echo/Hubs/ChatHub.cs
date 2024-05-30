@@ -21,7 +21,7 @@ namespace Echo.Hubs
 			_chatService = chatService;
 		}
 
-		public async Task SendMessage(Guid userUuid, Guid chatUuid, string messageContent)
+		public async Task SendMessage(Guid chatId, string messageContent)
 		{
 			var senderResult = await _userService.GetUserAsync(Context.User);
 			var sender = senderResult.Result;
@@ -29,12 +29,12 @@ namespace Echo.Hubs
 			if (sender == null)
 				return;
 
-			var result = await _chatService.GetChatByIdAsync(chatUuid);
+			var result = await _chatService.GetChatByIdAsync(chatId, true);
 			var chat = result.Result;
 			if (chat == null)
 				return;
 			
-			var isMember = await _chatService.IsUserInChatAsync(sender.Id, chatUuid);
+			var isMember = await _chatService.IsUserInChatAsync(sender.Id, chatId);
 			if (!isMember)
 				return;
 
@@ -47,10 +47,18 @@ namespace Echo.Hubs
 
 			await _chatService.CreateMessageAsync(message);
 
-			var recipientConnectionId = _userConnectionManager.GetConnectionId(userUuid);
+			var allMembers = chat.Owners.Concat(chat.Members).Distinct().ToList();
 
-			if (recipientConnectionId != null)
-				await Clients.Client(recipientConnectionId).SendAsync("ReceiveMessage", message.Id, sender.Id, chat.Id, messageContent);
+			// Iterate over all members
+			foreach (var member in allMembers)
+			{
+				var recipientConnectionId = _userConnectionManager.GetConnectionId(member.Id);
+
+				if (recipientConnectionId != null)
+				{
+					await Clients.Client(recipientConnectionId).SendAsync("ReceiveMessage", message.Id, sender.Id, chat.Id, messageContent, message.CreatedAt, message.UpdatedAt, sender.ProfileImagePath);
+				}
+			}
 		}
 
 		public override async Task OnConnectedAsync()

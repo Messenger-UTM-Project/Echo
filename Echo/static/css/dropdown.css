@@ -1,0 +1,78 @@
+/*Styling Selectbox*/
+.dropdown {
+  width: 300px;
+  display: inline-block;
+  background-color: var(--bg-color-secondary);
+  background-image: url(../../images/pat.svg);
+  background-position: bottom center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  box-shadow: 0 0 2px rgb(204, 204, 204);
+  border-radius: 1em;
+  transition: all 0.5s ease;
+  position: relative;
+  font-size: 14px;
+  color: var(--fg-color-primary);
+  height: 100%;
+  text-align: left;
+  outline: 0;
+}
+.dropdown .select {
+  cursor: pointer;
+  display: block;
+  padding: 10px;
+}
+.dropdown .select > i {
+  font-size: 13px;
+  color: var(--fg-color-secondary);
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  float: right;
+  line-height: 20px;
+}
+.dropdown:hover {
+  box-shadow: 0 0 4px rgb(204, 204, 204);
+}
+.dropdown:active {
+  background-color: var(--bg-color-secondary);
+}
+.dropdown.active:hover, .dropdown.active {
+  box-shadow: 0 0 4px rgb(204, 204, 204);
+  border-radius: 1em 1em 0 0;
+  background-color: var(--bg-color-secondary);
+}
+.dropdown.active .select > i {
+  transform: rotate(-90deg);
+}
+.dropdown .dropdown-menu {
+  position: absolute;
+  background-color: var(--bg-color-primary);
+  width: 100%;
+  left: 0;
+  border-radius: 0 0 1em 1em;
+  box-shadow: 0 1px 2px rgb(204, 204, 204);
+  overflow: hidden;
+  display: none;
+  max-height: 144px;
+  overflow-y: auto;
+  z-index: 7;
+  padding: 0;
+  list-style: none;
+}
+.dropdown .dropdown-menu .dropdown-item {
+  color: var(--fg-color-primary);
+  padding: 10px;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  background-color: var(--bg-color-secondary);
+  background-image: url(../../images/pat.svg);
+  background-position: bottom center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.dropdown .dropdown-menu .dropdown-item:hover {
+  background-color: var(--bg-color-secondary);
+}
+.dropdown .dropdown-menu .dropdown-item:active {
+  background-color: var(--bg-color-secondary);
+}

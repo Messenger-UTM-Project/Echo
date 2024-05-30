@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Localization;
 
-using Echo.Models;
+using Echo.Roles;
 using Echo.Services;
 
 namespace Echo.Controllers
@@ -14,11 +14,15 @@ namespace Echo.Controllers
 	[ApiController]
     public class ChatAPIController : ControllerBase
     {
+		private readonly UserService _userService;
         private readonly ChatService _chatService;
+		private readonly AppRoleManager _roleManager;
 
-        public ChatAPIController(ChatService chatService)
+        public ChatAPIController(UserService userService, ChatService chatService, AppRoleManager roleManager)
         {
+			_userService = userService;
 			_chatService = chatService;
+			_roleManager = roleManager;
         }
 		
         [HttpPost]
@@ -27,6 +31,10 @@ namespace Echo.Controllers
 		{
 			try
 			{
+				var userResult = await _userService.GetUserAsync(User);
+				var isAdmin = await _roleManager.UserIsInRole(userResult.Result.Id, "Admin");
+				if (!dto.OwnerUserIds.Contains(userResult.Result.Id) && !isAdmin)
+					return BadRequest("Not allowed.");
 				var chatResult = await _chatService.CreateChatAsync(dto.ChatName, dto.OwnerUserIds, dto.MemberUserIds);
 				return Ok(chatResult);
 			}

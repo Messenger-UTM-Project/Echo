@@ -18,7 +18,7 @@ namespace Echo.ViewComponents
             var model = new CultureSwitcher
             {
                 SupportedCultures = [.. localizationOptions.Value.SupportedUICultures],
-                CurrentUICulture = (cultureFeature != null) ? cultureFeature.RequestCulture.UICulture : null,
+                CurrentUICulture = cultureFeature?.RequestCulture.UICulture,
             };
             return View(model);
         }

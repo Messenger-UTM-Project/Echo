@@ -45,6 +45,9 @@ namespace Echo
 				builder.AddConsole();
 			});
 
+			TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time");
+			services.AddSingleton(timeZone);
+
             services.AddLocalization(options => options.ResourcesPath = "Resources");
 
             services.Configure<RequestLocalizationOptions>(options =>
@@ -57,6 +60,8 @@ namespace Echo
 				options.DefaultRequestCulture = new RequestCulture(defaultCulture);
 				options.SupportedCultures = cultures;
 				options.SupportedUICultures = cultures;
+
+				options.RequestCultureProviders.Insert(0, new CookieRequestCultureProvider());
 			});
 
             services.Configure<RazorViewEngineOptions>(o =>

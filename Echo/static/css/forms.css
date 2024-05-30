@@ -38,8 +38,8 @@
   position: relative;
   border-radius: 0.3em;
   background-color: var(--bg-color-primary);
-  -webkit-box-shadow: rgba(var(--box-shadow-color-primary-rgb), 0.3) 0px 7px 29px 0px;
-  box-shadow: rgba(var(--box-shadow-color-primary-rgb), 0.3) 0px 7px 29px 0px;
+  -webkit-box-shadow: rgba(var(--box-shadow-color-primary-rgb), 0.3) 0px 7px 12px 0px;
+  box-shadow: rgba(var(--box-shadow-color-primary-rgb), 0.3) 0px 7px 12px 0px;
   -webkit-transition: box-shadow 200ms linear;
   transition: box-shadow 200ms linear;
 }
@@ -84,7 +84,7 @@
   opacity: 0;
 }
 .form-group:focus-within {
-  box-shadow: rgba(var(--box-shadow-color-primary-rgb), 0.5) 0px 7px 29px 0px;
+  box-shadow: rgba(var(--box-shadow-color-primary-rgb), 0.5) 0px 7px 12px 0px;
 }
 
 .disabled {

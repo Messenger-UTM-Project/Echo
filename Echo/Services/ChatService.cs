@@ -84,7 +84,7 @@ namespace Echo.Services
 
 		public async Task<ServiceResult<Chat>> GetChatByIdAsync(Guid chatId, bool messages = false)
 		{
-			var chat = messages ? await _chatRepository.GetChatWithMessagesAsync(chatId) : await _chatRepository.FindByIdAsync(chatId);
+			var chat = messages ? await _chatRepository.GetFullChatAsync(chatId) : await _chatRepository.FindByIdAsync(chatId);
 			var result = new ServiceResult<Chat>
 			{
 				Result = chat,

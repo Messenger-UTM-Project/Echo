@@ -4,6 +4,7 @@
 		"inputFiles": [
 			"static/css/base.css",
 			"static/css/navbar.css",
+			"static/css/dropdown.css",
 			"static/css/context_menu.css"
 		],
 		"minify": {
@@ -49,6 +50,18 @@
 		"sourceMap": false
 	},
 	{
+		"outputFileName": "wwwroot/css/chat.css",
+		"inputFiles": [
+			"static/css/chat.css",
+			"static/css/forms.css"
+		],
+		"minify": {
+			"enabled": false,
+			"renameLocals": true
+		},
+		"sourceMap": false
+	},
+	{
 		"outputFileName": "wwwroot/css/profile.css",
 		"inputFiles": [
 			"static/css/profile.css",
@@ -75,6 +88,17 @@
 		"outputFileName": "wwwroot/css/light.css",
 		"inputFiles": [
 			"static/css/light.css"
+		],
+		"minify": {
+			"enabled": false,
+			"renameLocals": true
+		},
+		"sourceMap": false
+	},
+	{
+		"outputFileName": "wwwroot/css/intro.css",
+		"inputFiles": [
+			"static/css/intro.css"
 		],
 		"minify": {
 			"enabled": false,
@@ -136,6 +160,28 @@
 			"static/js/user_handler.js",
 			"static/js/chat_handler.js",
 			"static/js/friendship_handler.js"
+		],
+		"minify": {
+			"enabled": false,
+			"renameLocals": true
+		},
+		"sourceMap": false
+	},
+	{
+		"outputFileName": "wwwroot/js/intro.js",
+		"inputFiles": [
+			"static/js/intro.js"
+		],
+		"minify": {
+			"enabled": false,
+			"renameLocals": true
+		},
+		"sourceMap": false
+	},
+	{
+		"outputFileName": "wwwroot/js/dropdown.js",
+		"inputFiles": [
+			"static/js/dropdown.js"
 		],
 		"minify": {
 			"enabled": false,

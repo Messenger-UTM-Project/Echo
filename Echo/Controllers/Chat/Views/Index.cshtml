@@ -48,14 +48,14 @@
 			@foreach (var chat in Model)
 			{
 				var lastMessage = chat.Messages.OrderByDescending(m => m.CreatedAt).FirstOrDefault();
-			<a class="chat" href="">
+				<a class="chat" href="@Url.RouteUrl("Chat", new { guid = chat.Id })">
 				<i class="input-icon uil uil-chat chat-icon"></i>
 				<div id="@chat.Id" class="info">
 					<div class="name">@chat.Name</div>
 					<div class="message">
 					@if (lastMessage != null)
 					{
-						<div class="content">@lastMessage.User.UserName: @lastMessage.Content</div>
+						<div class="content">@lastMessage.User.Name: @lastMessage.Content</div>
 						<div class="date">@lastMessage.CreatedAt.ToString("g")</div>
 					}
 					else

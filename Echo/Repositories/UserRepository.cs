@@ -125,7 +125,7 @@ namespace Echo.Repositories
 				.SelectMany(u => u.OwnedChats.Union(u.MemberChats))
 				.Include(c => c.Messages)
 				.ThenInclude(h => h.User)
-				.OrderByDescending(c => c.Messages.Max(m => m.CreatedAt))
+				.OrderBy(c => c.Messages.Max(m => m.CreatedAt))
 				.ToListAsync();
 		}
 

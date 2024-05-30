@@ -28,6 +28,22 @@ export class ContextMenu {
 			"type" : "plain",
 			"icon" : ContextIcons.cut,
 			"text" : "Cut",
+		},
+		{
+			"type" : "plain",
+			"icon" : ContextIcons.cut,
+			"text" : "Swap theme",
+			"callback" : e => {
+				let theme = Cookies.get('theme');
+				if (theme)
+				{
+					if (theme == "dark")
+						Cookies.set("theme", "light", 60000)
+					else
+						Cookies.set("theme", "dark", 60000)
+					location.reload()
+				}
+			}
 		}
 	]
 
