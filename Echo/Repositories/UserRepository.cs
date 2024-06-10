@@ -129,6 +129,26 @@ namespace Echo.Repositories
 				.ToListAsync();
 		}
 
+		public async Task<List<User>> GetAllOutgoingFriendshipsAsync(Guid userId)
+		{
+			var initiatedFriends = await _dbContext.Friendships
+				.Where(f => f.User1Id == userId && f.Status == FriendshipStatus.Pending)
+				.Select(f => f.User2)
+				.ToListAsync();
+
+			return initiatedFriends;
+		}
+
+		public async Task<List<User>> GetAllIncomingFriendshipsAsync(Guid userId)
+		{
+			var receivedFriends = await _dbContext.Friendships
+				.Where(f => f.User2Id == userId && f.Status == FriendshipStatus.Pending)
+				.Select(f => f.User1)
+				.ToListAsync();
+
+			return receivedFriends;
+		}
+
 		public async Task<List<User>> GetAllFriendsAsync(Guid userId)
 		{
 			var initiatedFriends = await _dbContext.Friendships

@@ -6,7 +6,7 @@
   border-radius: 50%;
 }
 
-.qrcode-container, .profile-image-edit-container {
+.profile-image-edit-container {
   display: flex;
   gap: 2em;
   flex-direction: column;
@@ -22,14 +22,6 @@
   background-color: rgba(var(--bg-color-primary-rgb), 0.5);
   backdrop-filter: blur(4px);
   z-index: 10;
-}
-
-.qrcode-container .qrcode {
-  max-width: 20em;
-  aspect-ratio: 1;
-}
-.qrcode-container .qrcode path {
-  fill: var(--fg-color-primary);
 }
 
 .profile {

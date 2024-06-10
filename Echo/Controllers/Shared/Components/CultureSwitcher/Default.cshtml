@@ -20,7 +20,7 @@
 				@if (Model.CurrentUICulture != null && Model.CurrentUICulture.Name != culture.Name)
 				{
 				<a class="dropdown-item" target="_self" href="@Url.RouteUrl("SetCulture", new { culture = culture.Name, returnUrl = Context.Request.Path })" class="@(Model.CurrentUICulture?.Name == culture.Name ? "active" : "")">
-					<span class="noselect">@culture.NativeName</span>
+					<span class="noselect">@_[culture.NativeName]</span>
 				</a>
 				}
 			}

@@ -8,13 +8,13 @@
 
 @model List<User>
 
-@inject IStringLocalizer<IndexController> _
+@inject IStringLocalizer<FriendshipController> _
 
 @{
 	Layout = "/Controllers/Shared/_Layout.cshtml";
 	
-	ViewData["Title"] = _["Main"];
-	ViewData["Description"] = _["Main"];
+	ViewData["Title"] = _["Incoming requests"];
+	ViewData["Description"] = _["Incoming requests"];
 	ViewData["currentUrl"] = $"{ViewContext.HttpContext.Request.Scheme}://{ViewContext.HttpContext.Request.Host}{ViewContext.HttpContext.Request.Path}{ViewContext.HttpContext.Request.QueryString}";
 
 	var links = new List<NavbarLink>
@@ -28,33 +28,56 @@
 }
 
 @section Head {
-	<link rel="stylesheet" href="/css/index.css"/>
+	<link rel="stylesheet" href="/css/incoming.css"/>
 }
 
 @section Scripts {
-	<script type="module" src="/js/api.js"></script>
+	<script type="module">
+		import { Friendship, Chat } from "/js/api.js"
+
+		document.addEventListener('DOMContentLoaded', (event) => {
+			const acceptButtons = document.querySelectorAll('.accept');
+			acceptButtons.forEach(button => {
+				button.addEventListener('click', (e) => {
+					e.preventDefault();
+					const userId = e.target.closest(".user").getAttribute('id');
+					Friendship.accept("@ViewBag.Id", userId);
+				});
+			});
+			const rejectButtons = document.querySelectorAll('.reject');
+			rejectButtons.forEach(button => {
+				button.addEventListener('click', (e) => {
+					e.preventDefault();
+					const userId = e.target.closest(".user").getAttribute('id');
+					Friendship.reject("@ViewBag.Id", userId);
+				});
+			});
+		});
+	</script>
 }
 
 
 @await Component.InvokeAsync("Navbar", new { links = links, viewContext = ViewContext })
 <main>
 	<div class="container">
-		<h1 class="header">@_["Users"]</h1>
+		<h1 class="header">@_["Incoming Friendships"]</h1>
 		@if (Model.Count == 0)
 		{
-		<div class="placeholder">@_["No users yet"]</div>
+		<div class="placeholder">@_["No incoming frienships"]</div>
 		}
 		else
 		{
 		<div class="users">
 			@foreach (var user in Model)
 			{
-			<a class="user" href="@Url.RouteUrl("UUIDProfile", new { guid = user.Id })">
+			<a id="@user.Id" class="user" href="@Url.RouteUrl("UUIDProfile", new { guid = user.Id })">
 				<i class="input-icon uil uil-user user-icon"></i>
-				<div id="@user.Id" class="info">
+				<div class="info">
 					<div class="name">@user.Name</div>
 					<div class="username">@user.UserName</div>
 				</div>
+				<i class="input-icon uil uil-plus accept"></i>
+				<i class="input-icon uil uil-times reject"></i>
 			</a>
 			}
 		</div>

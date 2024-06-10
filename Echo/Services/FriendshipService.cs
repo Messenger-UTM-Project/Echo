@@ -33,6 +33,20 @@ namespace Echo.Services
 			if (userId == friendId)
 				throw new ArgumentException("A user cannot be friends with themselves.");
 
+			var existingFriendship = await _context.Friendships
+				.FirstOrDefaultAsync(f => (f.User1Id == userId && f.User2Id == friendId) || (f.User1Id == friendId && f.User2Id == userId));
+
+			var result = new ServiceResult<Friendship>(options =>
+			{
+				options.Result = null;
+				options.StatusCode = HttpStatusCode.NotFound;
+			});
+
+			if (existingFriendship != null)
+			{
+				return result;
+			}
+
 			var friendship = new Friendship
 			{
 				User1Id = userId,
@@ -40,7 +54,7 @@ namespace Echo.Services
 				Status = FriendshipStatus.Pending
 			};
 
-			var result = new ServiceResult<Friendship>(options =>
+			result = new ServiceResult<Friendship>(options =>
 			{
 				options.Result = friendship;
 			});
@@ -88,6 +102,33 @@ namespace Echo.Services
 				options.Result = friendship;
 			});
 
+			await _context.SaveChangesAsync();
+
+			return result;
+		}
+
+		public async Task<ServiceResult<Friendship>> DeleteFriendshipAsync(Guid userId, Guid friendId)
+		{
+			var friendship = await _context.Friendships
+				.FirstOrDefaultAsync(f => (f.User1Id == userId && f.User2Id == friendId) || (f.User1Id == friendId && f.User2Id == userId));
+
+			var result = new ServiceResult<Friendship>(options =>
+			{
+				options.Result = null;
+				options.StatusCode = HttpStatusCode.NotFound;
+			});
+
+			if (friendship == null)
+			{
+				return result;
+			}
+
+			result = new ServiceResult<Friendship>(options =>
+			{
+				options.Result = null;
+			});
+
+			_context.Friendships.Remove(friendship);
 			await _context.SaveChangesAsync();
 
 			return result;

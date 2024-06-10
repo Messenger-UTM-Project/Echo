@@ -1,12 +1,6 @@
-using System;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Localization;
 
 using Echo.Roles;
-using Echo.Models;
 using Echo.Services;
 
 namespace Echo.Controllers
@@ -85,6 +79,28 @@ namespace Echo.Controllers
 
 				var friendshipResult = await _friendshipService.RejectFriendshipAsync(dto.UserId, dto.FriendId);
 				return Ok(friendshipResult);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(new { message = ex.Message });
+			}
+		}
+
+		[HttpPost]
+		[Route("delete", Name = "DeleteFriendship")]
+		public async Task<IActionResult> DeleteFriendship([FromBody] ModifyFriendshipDto dto)
+		{
+			try
+			{
+				if (dto.UserId == dto.FriendId)
+					return BadRequest("Set different UUIDs.");
+				var userResult = await _userService.GetUserAsync(User);
+				var isAdmin = await _roleManager.UserIsInRole(userResult.Result.Id, "Admin");
+				if (userResult.Result.Id != dto.FriendId && !isAdmin)
+					return BadRequest("Not allowed.");
+
+				await _friendshipService.DeleteFriendshipAsync(dto.UserId, dto.FriendId);
+				return Ok(new {});
 			}
 			catch (Exception ex)
 			{

@@ -38,6 +38,42 @@
 		"sourceMap": false
 	},
 	{
+		"outputFileName": "wwwroot/css/friends.css",
+		"inputFiles": [
+			"static/css/friends.css",
+			"static/css/forms.css"
+		],
+		"minify": {
+			"enabled": false,
+			"renameLocals": true
+		},
+		"sourceMap": false
+	},
+	{
+		"outputFileName": "wwwroot/css/incoming.css",
+		"inputFiles": [
+			"static/css/incoming.css",
+			"static/css/forms.css"
+		],
+		"minify": {
+			"enabled": false,
+			"renameLocals": true
+		},
+		"sourceMap": false
+	},
+	{
+		"outputFileName": "wwwroot/css/outgoing.css",
+		"inputFiles": [
+			"static/css/outgoing.css",
+			"static/css/forms.css"
+		],
+		"minify": {
+			"enabled": false,
+			"renameLocals": true
+		},
+		"sourceMap": false
+	},
+	{
 		"outputFileName": "wwwroot/css/chats.css",
 		"inputFiles": [
 			"static/css/chats.css",
@@ -123,6 +159,17 @@
 		"outputFileName": "wwwroot/js/theme.js",
 		"inputFiles": [
 			"static/js/theme.js"
+		],
+		"minify": {
+			"enabled": false,
+			"renameLocals": true
+		},
+		"sourceMap": false
+	},
+	{
+		"outputFileName": "wwwroot/js/profile.js",
+		"inputFiles": [
+			"static/js/profile.js"
 		],
 		"minify": {
 			"enabled": false,

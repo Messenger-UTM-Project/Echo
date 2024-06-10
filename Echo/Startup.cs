@@ -86,14 +86,7 @@ namespace Echo
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            }).AddCookie(options =>
-            {
-				options.LoginPath = "/login";
-				options.LogoutPath = "/logout";
-				options.AccessDeniedPath = "/403";
-				options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-				options.SlidingExpiration = true;
-			}).AddJwtBearer(options =>
+            }).AddJwtBearer(options =>
 			{
 				options.TokenValidationParameters = new TokenValidationParameters
 				{
@@ -115,22 +108,48 @@ namespace Echo
 				});
 
 				options.DefaultPolicy = new AuthorizationPolicyBuilder()
-				  .RequireAuthenticatedUser()
-				  .Build();
+					.RequireAuthenticatedUser()
+					.Build();
+
+				options.FallbackPolicy = new AuthorizationPolicyBuilder()
+					.RequireAuthenticatedUser()
+					.Build();
 			});
 
 			services.AddIdentity<User, UserRole>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
+				options.SignIn.RequireConfirmedEmail = false;
+				options.SignIn.RequireConfirmedPhoneNumber = false;
+
                 options.Password.RequireDigit = true;
                 options.Password.RequireLowercase = true;
                 options.Password.RequireUppercase = true;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 8;
+				options.Password.RequiredUniqueChars = 1;
+
+				options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+				options.Lockout.MaxFailedAccessAttempts = 5;
+				options.Lockout.AllowedForNewUsers = true;
+
+				options.User.AllowedUserNameCharacters =
+				"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+				options.User.RequireUniqueEmail = false;
             })
                 .AddEntityFrameworkStores<AppDbContext>()
 				.AddDefaultUI()
 				.AddDefaultTokenProviders();
+
+			services.ConfigureApplicationCookie(options =>
+			{
+				options.Cookie.HttpOnly = true;
+				options.LoginPath = "/login";
+				options.LogoutPath = "/logout";
+				options.AccessDeniedPath = "/403";
+				options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+				options.SlidingExpiration = true;
+			});
 
 			services.AddDbContext<AppDbContext>(options =>
 				options

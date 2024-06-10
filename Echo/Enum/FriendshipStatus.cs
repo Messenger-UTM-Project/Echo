@@ -13,5 +13,7 @@ namespace Echo.Enum
 		Denied = 3,
 		[Display(Name = "Rejected")]
 		Rejected = 4,
+		[Display(Name = "Cancelled")]
+		Cancelled = 5,
 	}
 }

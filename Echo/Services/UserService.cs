@@ -173,6 +173,56 @@ namespace Echo.Services
 			return result;
 		}
 
+		public async Task<ServiceResult<List<User>>> GetAllIncomingFriendshipsAsync(ClaimsPrincipal userPrincipal)
+		{
+			var user = await _userManager.GetUserAsync(userPrincipal);
+			var friends = await _userRepository.GetAllIncomingFriendshipsAsync(user.Id);
+			var result = new ServiceResult<List<User>>
+			{
+				Result = friends,
+				StatusCode = friends == null ? HttpStatusCode.NotFound : HttpStatusCode.OK
+			};
+
+			return result;
+		}
+
+		public async Task<ServiceResult<List<User>>> GetAllIncomingFriendshipsAsync(Guid userId)
+		{
+			var friends = await _userRepository.GetAllIncomingFriendshipsAsync(userId);
+			var result = new ServiceResult<List<User>>
+			{
+				Result = friends,
+				StatusCode = friends == null ? HttpStatusCode.NotFound : HttpStatusCode.OK
+			};
+
+			return result;
+		}
+
+		public async Task<ServiceResult<List<User>>> GetAllOutgoingFriendshipsAsync(ClaimsPrincipal userPrincipal)
+		{
+			var user = await _userManager.GetUserAsync(userPrincipal);
+			var friends = await _userRepository.GetAllOutgoingFriendshipsAsync(user.Id);
+			var result = new ServiceResult<List<User>>
+			{
+				Result = friends,
+				StatusCode = friends == null ? HttpStatusCode.NotFound : HttpStatusCode.OK
+			};
+
+			return result;
+		}
+
+		public async Task<ServiceResult<List<User>>> GetAllOutgoingFriendshipsAsync(Guid userId)
+		{
+			var friends = await _userRepository.GetAllOutgoingFriendshipsAsync(userId);
+			var result = new ServiceResult<List<User>>
+			{
+				Result = friends,
+				StatusCode = friends == null ? HttpStatusCode.NotFound : HttpStatusCode.OK
+			};
+
+			return result;
+		}
+
 		public async Task<ServiceResult<IdentityResult>> UpdateUserAsync(User user)
 		{
 			var updateResult = await _userManager.UpdateAsync(user);

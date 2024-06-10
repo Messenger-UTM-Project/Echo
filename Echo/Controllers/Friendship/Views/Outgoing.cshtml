@@ -8,13 +8,13 @@
 
 @model List<User>
 
-@inject IStringLocalizer<IndexController> _
+@inject IStringLocalizer<FriendshipController> _
 
 @{
 	Layout = "/Controllers/Shared/_Layout.cshtml";
 	
-	ViewData["Title"] = _["Main"];
-	ViewData["Description"] = _["Main"];
+	ViewData["Title"] = _["outgoing requests"];
+	ViewData["Description"] = _["Outgoing requests"];
 	ViewData["currentUrl"] = $"{ViewContext.HttpContext.Request.Scheme}://{ViewContext.HttpContext.Request.Host}{ViewContext.HttpContext.Request.Path}{ViewContext.HttpContext.Request.QueryString}";
 
 	var links = new List<NavbarLink>
@@ -28,33 +28,47 @@
 }
 
 @section Head {
-	<link rel="stylesheet" href="/css/index.css"/>
+	<link rel="stylesheet" href="/css/outgoing.css"/>
 }
 
 @section Scripts {
-	<script type="module" src="/js/api.js"></script>
+	<script type="module">
+		import { Friendship } from "/js/friendship.js"
+
+		document.addEventListener('DOMContentLoaded', (event) => {
+			const deleteButtons = document.querySelectorAll('.cancel-friendship');
+			deleteButtons.forEach(button => {
+				button.addEventListener('click', (e) => {
+					e.preventDefault();
+					const userId = e.target.closest(".user").getAttribute('id');
+					Friendship.delete("@ViewBag.Id", userId);
+				});
+			});
+		});
+	</script>
 }
 
 
 @await Component.InvokeAsync("Navbar", new { links = links, viewContext = ViewContext })
 <main>
 	<div class="container">
-		<h1 class="header">@_["Users"]</h1>
+		<h1 class="header">@_["Outgoing Friendships"]</h1>
 		@if (Model.Count == 0)
 		{
-		<div class="placeholder">@_["No users yet"]</div>
+		<div class="placeholder">@_["No outgoing frienships"]</div>
 		}
 		else
 		{
 		<div class="users">
 			@foreach (var user in Model)
 			{
-			<a class="user" href="@Url.RouteUrl("UUIDProfile", new { guid = user.Id })">
+			<a id="@user.Id" class="user" href="@Url.RouteUrl("UUIDProfile", new { guid = user.Id })">
 				<i class="input-icon uil uil-user user-icon"></i>
-				<div id="@user.Id" class="info">
+				<div class="info">
 					<div class="name">@user.Name</div>
 					<div class="username">@user.UserName</div>
 				</div>
+				<i class="input-icon uil uil-times cancel-friendship"></i>
 			</a>
 			}
 		</div>

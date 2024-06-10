@@ -21,6 +21,7 @@
 	{
 		new NavbarLink { RouteName = "Index", IconClass = "uil-code-branch", Text = "Home" },
 		new NavbarLink { RouteName = "Profile", IconClass = "uil-chat-bubble-user" },
+		new NavbarLink { RouteName = "Friends", IconClass = "uil-user-arrows" },
 		new NavbarLink { RouteName = "Chats", IconClass = "uil-chat" },
 		new NavbarLink { RouteName = "Logout", IconClass = "uil-signout" }
 	};
@@ -52,6 +53,8 @@
 				if (e.key === 'Enter') {
 					Chat.sendMessage("@Model.Id", e.currentTarget.value);
 					e.currentTarget.value = null;
+					let messagesElement = document.querySelector(".messages");
+					messagesElement.scrollTop = messagesElement.scrollHeight;
 				}
 			});
         });
@@ -61,12 +64,20 @@
 				let input = document.querySelector(".message-input");
 				Chat.sendMessage("@Model.Id", input.value);
 				input.value = null;
+				let messagesElement = document.querySelector(".messages");
+				messagesElement.scrollTop = messagesElement.scrollHeight;
 			});
         });
 
 		function createMessageElement(id, userId, content, createdAt, updatedAt, profileImagePath) {
 			const messageElement = document.createElement('div');
-			messageElement.classList.add('message', 'message-right');
+			messageElement.classList.add('message');
+			if ("@ViewBag.User.Id" === userId) {
+				messageElement.classList.add('message-right');
+			}
+			else {
+				messageElement.classList.add('message-left');
+			}
 			messageElement.setAttribute('id', `${id}`);
 
 			const contentElement = document.createElement('div');
@@ -86,7 +97,7 @@
 
 			var anchorElement = document.createElement('a');
 
-			var url = '@Url.RouteUrl("UUIDProfile", new { guid = "ViewBag.User.Id" })'.replace("@ViewBag.User.Id" userId);
+			var url = '@Url.RouteUrl("UsernameProfile", new { username = "MESSAGE_USER_ID" })'.replace("MESSAGE_USER_ID", userId);
 			anchorElement.setAttribute('href', url);
 
 			const profileImageElement = document.createElement('div');
@@ -95,8 +106,14 @@
 
 			anchorElement.appendChild(profileImageElement);
 
-			messageElement.appendChild(contentElement);
-			messageElement.appendChild(anchorElement);
+			if ("@ViewBag.User.Id" === userId) {
+				messageElement.appendChild(contentElement);
+				messageElement.appendChild(anchorElement);
+			}
+			else {
+				messageElement.appendChild(anchorElement);
+				messageElement.appendChild(contentElement);
+			}
 
 			return messageElement;
 		}
@@ -112,20 +129,19 @@
 				<div class="members">@Model.Owners.Count owners, @Model.Members.Count members</div>
 			</div>
 		</div>
-		@if (Model.Messages.Count == 0)
-		{
-		<div class="placeholder">
-			<div class="text">@_["No messages yet"]</div>
-		</div>
-		}
-		else
-		{
 		<div id="@Model.Id" class="messages">
+			@if (Model.Messages.Count == 0)
+			{
+			<div class="placeholder">
+				<div class="text">@_["No messages yet"]</div>
+			</div>
+			}
+
 			@for (var i = 0; i < Model.Messages.Count; i++)
 			{
 				var message = messagesList[i];
 				var nextMessage = i < Model.Messages.Count - 1 ? messagesList[i + 1] : null;
-				if (previousMessageDate.Date != message.CreatedAt.Date)
+				if (TimeZoneInfo.ConvertTimeFromUtc(previousMessageDate, timeZone).Date != TimeZoneInfo.ConvertTimeFromUtc(message.CreatedAt, timeZone).Date)
 				{
 			<div class="date-mark">@TimeZoneInfo.ConvertTimeFromUtc(message.CreatedAt, timeZone).ToString("M")</div>
 				}
@@ -133,7 +149,7 @@
 				if (message.UserId == ViewBag.User.Id)
 				{
 			<div id="@message.Id" class="message message-right">
-				<div class="content" title="Last edited at: @TimeZoneInfo.ConvertTimeFromUtc(message.UpdatedAt, timeZone).ToString("T")">
+				<div class="content" title="@_["Last edited at"]: @TimeZoneInfo.ConvertTimeFromUtc(message.UpdatedAt, timeZone).ToString("T")">
 					<div class="text">@message.Content</div>
 					<div class="date">@TimeZoneInfo.ConvertTimeFromUtc(message.CreatedAt, timeZone).ToString("t")</div>
 				</div>
@@ -148,7 +164,7 @@
 				<a href="@Url.RouteUrl("UUIDProfile", new { guid = message.User.Id })">
 					<div class="profile-image" style="background-image: url('@(nextMessage == null || nextMessage.User.Id != message.User.Id ? message.User.ProfileImagePath : "" )')"></div>
 				</a>
-				<div class="content" title="Last edited at: @TimeZoneInfo.ConvertTimeFromUtc(message.UpdatedAt, timeZone).ToString("T")">
+				<div class="content" title="@_["Last edited at"]: @TimeZoneInfo.ConvertTimeFromUtc(message.UpdatedAt, timeZone).ToString("T")">
 					<div class="text">@message.Content</div>
 					<div class="date">@TimeZoneInfo.ConvertTimeFromUtc(message.CreatedAt, timeZone).ToString("t")</div>
 				</div>
@@ -156,7 +172,6 @@
 				}
 			}
 		</div>
-		}
 		<div class="type form-group">
 			<input type="text" class="message-input form-style" placeholder="Type message here"/>
 			<i class="uil uil-telegram input-icon"></i>

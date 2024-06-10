@@ -20,6 +20,7 @@
 	var links = new List<NavbarLink>
 	{
 		new NavbarLink { RouteName = "Index", IconClass = "uil-code-branch", Text = "Home" },
+		new NavbarLink { RouteName = "Friends", IconClass = "uil-user-arrows" },
 		new NavbarLink { RouteName = "Chats", IconClass = "uil-chat" },
 		new NavbarLink { RouteName = "Logout", IconClass = "uil-signout" }
 	};
@@ -30,7 +31,25 @@
 }
 
 @section Scripts {
-	<script type="module" src="/js/chat.js"></script>
+	<script src="/js/profile.js" defer></script>
+	<script type="module">
+		import { Friendship, Chat } from "/js/api.js"
+
+		document.addEventListener('DOMContentLoaded', (event) => {
+			const addFriendButtons = document.querySelectorAll('.add-friend');
+			addFriendButtons.forEach(button => {
+				button.addEventListener('click', (e) => {
+					Friendship.create("@ViewBag.currentUser.Id", "@ViewBag.Id");
+				});
+			});
+			const createChatButtons = document.querySelectorAll('.create-chat');
+			createChatButtons.forEach(button => {
+				button.addEventListener('click', (e) => {
+					Chat.createChat("@ViewBag.currentUser.Name, @ViewBag.Name", ["@ViewBag.currentUser.Id", "@ViewBag.Id"], []);
+				});
+			});
+		});
+	</script>
 }
 
 @await Component.InvokeAsync("Navbar", new { links = links, viewContext = ViewContext })
@@ -39,16 +58,27 @@
 		<div class="profile">
 			<div class="header">
 				<div class="image" style="background-image: url('@ViewBag.ProfileImagePath');">
+					@if (ViewBag.currentUser.Id == ViewBag.Id)
+					{
 					<div class="overlay editProfilePicture">
 						<i class="uil uil-image-edit"></i>
 					</div>
+					}
 				</div>
 				<div class="info">
 					<div class="name">@ViewBag.Name</div>
 					<div class="username">@ViewBag.UserName</div>
 				</div>
 				<div class="buttons">
+					@if (ViewBag.currentUser.Id == ViewBag.Id)
+					{
 					<i class="uil uil-edit btn"></i>
+					}
+					else
+					{
+					<i class="uil uil-plus btn add-friend"></i>
+					<i class="uil uil-chat btn create-chat"></i>
+					}
 				</div>
 			</div>
 			<div class="main" style="white-space: break-spaces;">
@@ -75,4 +105,17 @@
 			</div>
 		</div>
 	</div>
+	@if (ViewBag.currentUser.Id == ViewBag.Id)
+	{
+	<div class="profile-image-edit-container hidden">
+		@using (Html.BeginForm("UploadProfileImage", "Profile", FormMethod.Post, new { @class = "vert-form", @enctype = "multipart/form-data" }))
+		{
+			@Html.AntiForgeryToken()
+			 <div class="form-group"> 
+				<input type="file" id="file" name="file" accept="image/*" required>
+			 </div> 
+			<input type="submit" value="@_["Upload"]" class="btn mt-4">
+		}
+	</div>
+	}
 </main>

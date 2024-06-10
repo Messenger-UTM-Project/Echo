@@ -1,0 +1,85 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers;
+@using Microsoft.AspNetCore.Mvc.ViewFeatures;
+@using Microsoft.Extensions.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@using Echo.Controllers
+@using Echo.Models
+
+@model List<User>
+
+@inject IStringLocalizer<FriendshipController> _
+
+@{
+	Layout = "/Controllers/Shared/_Layout.cshtml";
+	
+	ViewData["Title"] = _["Friends"];
+	ViewData["Description"] = _["Friends"];
+	ViewData["currentUrl"] = $"{ViewContext.HttpContext.Request.Scheme}://{ViewContext.HttpContext.Request.Host}{ViewContext.HttpContext.Request.Path}{ViewContext.HttpContext.Request.QueryString}";
+	
+	var links = new List<NavbarLink>
+	{
+		new NavbarLink { RouteName = "Index", IconClass = "uil-code-branch", Text = "Home" },
+		new NavbarLink { RouteName = "Profile", IconClass = "uil-chat-bubble-user" },
+		new NavbarLink { RouteName = "Chats", IconClass = "uil-chat" },
+		new NavbarLink { RouteName = "Logout", IconClass = "uil-signout" }
+	};
+}
+
+@section Head {
+	<link rel="stylesheet" href="/css/friends.css"/>
+}
+
+@section Scripts {
+	<script type="module">
+		import { Friendship } from "/js/friendship.js"
+
+		document.addEventListener('DOMContentLoaded', (event) => {
+			const deleteButtons = document.querySelectorAll('.delete-friendship');
+			deleteButtons.forEach(button => {
+				button.addEventListener('click', (e) => {
+					e.preventDefault();
+					const friendId = e.target.closest(".friend").getAttribute('id');
+					Friendship.delete("@ViewBag.Id", friendId);
+				});
+			});
+		});
+	</script>
+}
+
+@await Component.InvokeAsync("Navbar", new { links = links, viewContext = ViewContext })
+<main>
+	<div class="container">
+		<div class="header-container">
+			<h1 class="header">@_["Friends"]</h1>
+			<div class="links">
+				<a class="incoming" href="@Url.RouteUrl("IncomingFriendships")">
+					<i class="input-icon uil uil-arrow-from-top btn"></i>
+				</a>
+				<a class="outgoing" href="@Url.RouteUrl("OutgoingFriendships")">
+					<i class="input-icon uil uil-top-arrow-from-top btn"></i>
+				</a>
+			</div>
+		</div>
+		@if (Model.Count == 0)
+		{
+		<div class="placeholder">@_["No friends yet"]</div>
+		}
+		else
+		{
+		<div class="friends">
+			@foreach (var friend in Model)
+			{
+			<a id="@friend.Id" class="friend" href="@Url.RouteUrl("UUIDProfile", new { guid = friend.Id })">
+				<i class="input-icon uil uil-user friend-icon"></i>
+				<div class="info">
+					<div class="name">@friend.Name</div>
+					<div class="username">@friend.UserName</div>
+				</div>
+				<i class="input-icon uil uil-times delete-friendship"></i>
+			</a>
+			}
+		</div>
+		}
+	</div>
+</main>

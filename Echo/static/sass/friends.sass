@@ -2,34 +2,42 @@
 @import 'prefixes'
 @import 'variables'
 
-.header
-  font-size: 2.5em
-  margin-bottom: 0.25em
-  font-family: inherit
-  font-weight: 500
-  line-height: 1.2
-  margin-top: 0
-  color: inherit
+%profile-picture
+  min-width: 2em
+  width: 100%
+  max-width: 12em
+  aspect-ratio: 1
+  border-radius: 50%
 
-  @include media("max-width: 768px")
-    text-align: center
+.header-container
+  display: flex
+  flex-direction: row
+  align-items: center
 
-.name
-  font-size: 1.2em
-  text-align: center
+  & .links
+    display: flex
+    flex-direction: row
+    align-items: center
+    gap: 1em
+    margin-left: auto
 
-.chat .chat-icon 
-  font-size: 1.75em
+  & .header
+    font-size: 2.5em
+    margin-bottom: 0.25em
+    font-family: inherit
+    font-weight: 500
+    line-height: 1.2
+    margin-top: 0
+    color: inherit
 
-.message 
-  & .content
-    font-size: 1em
+    @include media("max-width: 768px")
+      text-align: center
 
-.date
-  font-size: 0.8em
-  color: $btn-bg-color-primary
+.delete-friendship
+  display: flex !important
+  align-self: center
 
-.chats
+.friends
   display: grid
   flex-direction: column
   gap: 1.5em
@@ -38,9 +46,9 @@
     grid-template-columns: repeat(auto-fill, minmax(12em, 1fr))
 
   @include media("min-width: 768px") 
-    grid-template-columns: repeat(auto-fill, minmax(20em, 1fr))
+    grid-template-columns: repeat(auto-fill, minmax(16em, 1fr))
 
-.chat
+.friend
   display: flex
   align-content: stretch
   gap: 1em
@@ -65,14 +73,22 @@
   &:hover
     box-shadow: rgba($box-shadow-color-primary-rgb, 0.6) 0px 7px 12px 0px
 
-  & .content
-    max-width: 50%
-    overflow: hidden
-    white-space: nowrap
-    text-overflow: ellipsis
+  & .name
     @include prefix(transition, color $transition-speed linear, webkit)
+    font-size: 1.2em
+    text-align: center
 
-.chat-icon
+  & .username
+    font-size: 0.8em
+    color: $btn-bg-color-primary
+
+  & .friend-icon 
+    font-size: 1.75em
+
+  & .name, & .username
+    text-align: center
+
+.friend-icon
   display: flex !important
   align-self: center
 
@@ -83,17 +99,10 @@
   background-size: cover
 
 .info 
-  width: 100%
   display: flex
   flex-direction: column
-  gap: 0.5em
   margin-left: auto
   margin-right: auto
 
   @include media("max-width: 768px") 
     text-align: center
-
-.message
-    display: flex
-    flex-direction: column
-    align-items: center

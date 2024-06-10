@@ -60,4 +60,24 @@ export class Friendship {
 
 		return await response.json();
 	}
+
+	static async delete(userId, friendId) {
+		const url = `${this.apiBaseUrl}/delete`;
+		const body = JSON.stringify({ userId, friendId });
+
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: body
+		});
+
+		if (!response.ok) {
+			const error = await response.json();
+			throw new Error(error.message);
+		}
+
+		return await response.json();
+	}
 }

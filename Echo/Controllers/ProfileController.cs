@@ -34,6 +34,7 @@ namespace Echo.Controllers
         {
 			var userResult = await _userService.GetUserAsync(User);
 			var user = userResult.Result;
+			ViewBag.currentUser = user;
 			ViewBag.Id = user.Id;
 			ViewBag.Name = user.Name;
 			ViewBag.UserName = user.UserName;
@@ -48,8 +49,11 @@ namespace Echo.Controllers
         {
 			var result = await _userService.GetUserAsync(guid);
 			var user = result.Result;
+			var userResult = await _userService.GetUserAsync(User);
+			ViewBag.currentUser = userResult.Result;
 			if (user == null)
 				return NotFound("User not found.");
+			ViewBag.Id = user.Id;
 			ViewBag.Name = user.Name;
 			ViewBag.UserName = user.UserName;
 			ViewBag.ProfileImagePath = user.ProfileImagePath;
@@ -63,8 +67,11 @@ namespace Echo.Controllers
         {
 			var result = await _userService.GetUserAsync(username);
 			var user = result.Result;
+			var userResult = await _userService.GetUserAsync(User);
+			ViewBag.currentUser = userResult.Result;
 			if (user == null)
 				return NotFound("User not found.");
+			ViewBag.Id = user.Id;
 			ViewBag.Name = user.Name;
 			ViewBag.UserName = user.UserName;
 			ViewBag.ProfileImagePath = user.ProfileImagePath;
@@ -73,6 +80,7 @@ namespace Echo.Controllers
         }
 
 		[HttpPost]
+		[ValidateAntiForgeryToken]
         [Route("uploadProfileImage", Name = "UploadProfileImage")]
 		public async Task<IActionResult> UploadProfileImage(IFormFile file)
 		{
@@ -98,7 +106,7 @@ namespace Echo.Controllers
 				}
 			}
 
-			return RedirectToAction("Profile");
+			return RedirectToAction("Index", "Profile");
 		}
     }
 }

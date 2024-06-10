@@ -33,9 +33,14 @@
   flex-direction: column
   gap: .75em
   overflow-y: scroll
-  height: calc(100vh - 17.5em)
   max-height: 100vh
   margin-bottom: 0.75em
+
+  @include media("max-width: 768px") 
+    height: calc(100vh - 23.5em)
+
+  @include media("min-width: 768px") 
+    height: calc(100vh - 19em)
 
   & .date-mark
     color: $fg-color-secondary
